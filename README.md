@@ -1,2 +1,2 @@
 # 3340-project
-Testing
+COMP-3340 Project Team 1 Readme file
