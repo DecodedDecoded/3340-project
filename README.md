@@ -5,6 +5,8 @@ Last updated: July 27, 2021
 
 
 --
+--
+
 TEAM 1 GROUP MEMBERS:
 
 -- Abhilash Harsh Saksena, Backend Developer
@@ -15,6 +17,8 @@ TEAM 1 GROUP MEMBERS:
 
 
 --
+--
+
 NOTES:
 
 Our website - HoardBoard.com (tentative name)
@@ -23,6 +27,8 @@ Purpose - HoardBoard.com is a website where users can collect and share resource
 
 
 --
+--
+
 PROJECT LINKS:
 
 Site URL: https://ahmed16r.myweb.cs.uwindsor.ca/hoardboard.com/
@@ -31,6 +37,8 @@ Team Management Tool: Teamwork (https://1623879748125.teamwork.com/#/projects/77
 
 
 --
+--
+
 HOW THIS PROJECT WAS BUILT:
 
 This website consists of 50+ dynamic pages and 10 static pages.
@@ -50,6 +58,8 @@ For the backend development, we used the following:
 
 
 --
+--
+
 PROJECT INITIALIZATION INSTRUCTIONS:
 
 There are a few things that need to be done before beginning this project. Before getting started, please make sure of the following:
@@ -66,6 +76,8 @@ There are a few things that need to be done before beginning this project. Befor
 
 
 --
+--
+
 WHAT COMES NEXT:
 
 Now that the project is initialized, we can begin building the website in the React environment.
@@ -74,6 +86,8 @@ Additional instructions are provided in more specialized documentation files for
 
 
 --
+--
+
 SOURCE CODE FILES:
 
 Frontend:
@@ -82,6 +96,8 @@ Backend:
 
 
 --
+--
+
 OTHER DOCUMENTATION FILES:
 
 Frontend:
