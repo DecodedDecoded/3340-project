@@ -4,6 +4,7 @@ COMP-3340 Project Team 1 - General Project Documentation
 Last updated: July 27, 2021
 
 --
+--
 
 TEAM 1 GROUP MEMBERS:
 
@@ -38,7 +39,7 @@ This website consists of 50+ dynamic pages and 10 static pages.
 
 For the frontend development, we used the following languages and technologies:
 
--- ReactJS JavaScript library
+-- ReactJS JavaScript libcd hrary
 -- Material UI (frontend JavaScript framework that works with React)
 --Flexbox CSS layout module
 
