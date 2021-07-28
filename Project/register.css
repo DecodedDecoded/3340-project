@@ -1,0 +1,55 @@
+/* Register page container */
+.register__container {
+    /* Center page contents vertically & horizontally */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    /* height is 100% of viewport height */
+    height: 100vh;
+
+    /* bg color */
+    background-color: #efefee;
+}
+
+/* container for register box in page center */
+.register__box {
+    flex-grow: 0.15;/* grow up to a 15th of the space available */
+    background-color: white;
+    
+    /* Register box is between 300px and 100% */
+    min-height: 300px;
+    max-height: 100%;
+    width: 300px;
+
+    /* 20px top & bottom, 35px left & right */
+    padding: 20px 35px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0 1px 2px;
+    
+    /* Show scrollbar if necessary */
+    overflow-y: auto;
+}
+
+/**/
+.register__header {
+    padding: 20px 0px;
+}
+
+/* Make sure logo image is small */
+img {
+    width: 150px;
+}
+
+/* CSS for titles */
+.reg__tag {
+    font-weight: 400px;
+    font-size: 24px;
+    line-height: 32px;
+    margin: 0;
+    padding-bottom: 0;
+    padding-top: 16px;
+}
+
+span {
+    font-size: 14px;
+}
