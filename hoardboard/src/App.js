@@ -1,6 +1,6 @@
 import './App.css';
 import MenuBar from './Home/MenuBar';
-import SearchBar from './Home/SearchBar';
+import HeaderBar from './Home/HeaderBar';
 import Recommended from './Home/Recommended';
 
 function App() {
@@ -12,7 +12,7 @@ function App() {
 
             <div className="app__page">
                 {/* Search Bar on top */}
-                <SearchBar />
+                <HeaderBar />
                 
                 {/* Recommendations --> Featured? */}
                 <Recommended />

@@ -2,19 +2,22 @@
 .menubar {
     display: flex;
     flex-direction: column;
-    border-right: 1px solid rgba(250, 250, 210, 0.897);
     /* Make the header stay in view, at the top
         z-index determines how in front it is (z axis)
         z-index 100 means nothing will ever be in front of it
         Background color so that it isn't transparent
     */
-    background-color: lightgoldenrodyellow;
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 
 /* Set CSS for logo to make it fit in page */
 .logo__container {
     top: 0;
     margin-bottom: 20px;
+    margin-right: 58px;
+    margin-left: 58px;
 }
 
 /* User bar CSS */

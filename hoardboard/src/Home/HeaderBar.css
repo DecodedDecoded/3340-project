@@ -1,12 +1,12 @@
 /* Make CSS flex, center items & space between child containers */
-.searchbar {
+.headerbar {
     display: flex;
     flex: 99%;
     align-items: center;
     justify-content: space-between;
     padding: 20px;
     border-bottom: 1px solid lightgray;
-    /* Make the header stay in view, at the top
+    /* Make the searchbar stay in view, at the top
         z-index determines how in front it is (z axis)
         z-index 100 means nothing will ever be in front of it
         Background color so that it isn't transparent

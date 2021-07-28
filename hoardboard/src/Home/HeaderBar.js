@@ -1,11 +1,11 @@
 import React from 'react';
-import './SearchBar.css';
+import './HeaderBar.css';
 import SearchIcon from '@material-ui/icons/Search';
 import Avatar from '@material-ui/core/Avatar';
 
-function SearchBar() {
+function HeaderBar() {
     return (
-        <div className="searchbar">
+        <div className="headerbar">
             {/* Search Bar container */}
             <div className="searchbar__container">
                 <input type="text" placeholder="Search"/>
@@ -25,4 +25,4 @@ function SearchBar() {
     )
 }
 
-export default SearchBar;
+export default HeaderBar;
