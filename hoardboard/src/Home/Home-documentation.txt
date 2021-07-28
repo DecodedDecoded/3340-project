@@ -1,0 +1,38 @@
+COMP-3340 Project Team 1 - Front Page Documentation (Frontend)
+
+Last updated: July 27, 2021
+-------
+
+All source code files are contained in folder 'src'.
+
+Source code files for the homepage components are contained in subfolder 'src/Home'.
+
+-------------------------------------------
+SETUP:
+
+Before getting started with frontend development, please do the following:
+
+1. Delete these test default files from 'src':
+
+-- App.test.js
+-- setupTests.js
+-- logo.svg
+
+2. In App.js, remove the 'import logo from './logo.svg';' at the top of the file.
+Also remove everything inside the div with className "App".
+
+3. Open a second terminal & install Material UI by typing:
+    "npm install @material-ui/core"
+
+4. Also install Material UI Icons:
+    "npm install @material-ui/icons"
+    
+--------------------------------------------
+CODE LAYOUT:
+
+Each page component is coded in its own separate file, and then imported into
+the App.js file as an object. This simplifies the coding and makes it look much smoother
+as well.
+
+Components & their files:
+

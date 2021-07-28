@@ -46,7 +46,7 @@ This website consists of 50+ dynamic pages and 10 static pages.
 
 For the frontend development, we used the following languages and technologies:
 
--- ReactJS JavaScript libcd hrary
+-- ReactJS JavaScript library
 -- Material UI (frontend JavaScript framework that works with React)
 --Flexbox CSS layout module
 
@@ -91,6 +91,9 @@ Additional instructions are provided in more specialized documentation files for
 SOURCE CODE FILES:
 
 Frontend:
+
+-- Main file (Home): App.js (JavaScript)
+-- Main styles file (Home): App.css
 
 Backend:
 

@@ -1,0 +1,24 @@
+.sidebar {
+    display:flex;/**/
+}
+
+/* Search bar CSS */
+.search__bar {
+    display: flex;
+    align-items: center;
+    width: 40%;
+    border: 1px solid lightgray;
+}
+
+/* Set flex 1 so that search input bar uses as much room as possible */
+.search__bar > input {
+    flex: 100%;
+    border: none;
+}
+
+.search__button {
+    width: 10% !important;/* override default width*/
+    background-color: #fafafa;
+    border-left: 1px solid lightgray;
+    color: gray;
+}
