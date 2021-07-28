@@ -1,3 +1,4 @@
+<?php require_once("db_creds.php"); ?>
 <!DOCTYPE html>
 <html>
     <head>
