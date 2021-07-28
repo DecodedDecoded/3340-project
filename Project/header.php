@@ -49,7 +49,7 @@
                     <img class="upload" src="imgs/upload.png" title="upload" alt="Upload">
                 </a>
 
-                <a href="#">
+                <a href="login.php">
                     <img class="upload" src="imgs/default.png" title="profile" alt="Profile Picture">
                 </a>
             </div>
