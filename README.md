@@ -3,9 +3,8 @@ COMP-3340 Project Team 1 - General Project Documentation
 
 Last updated: July 27, 2021
 
---
---
 
+--
 TEAM 1 GROUP MEMBERS:
 
 -- Abhilash Harsh Saksena, Backend Developer
@@ -15,7 +14,7 @@ TEAM 1 GROUP MEMBERS:
 -- Liban Guled, Frontend Developer
 
 
-
+--
 NOTES:
 
 Our website - HoardBoard.com (tentative name)
@@ -23,7 +22,7 @@ Our website - HoardBoard.com (tentative name)
 Purpose - HoardBoard.com is a website where users can collect and share resources in their own personal “content libraries”. These resources can be videos, images, diagrams, documents, links, embedded articles, etc. Essentially, it’s like YouTube and Instagram combined. It's a YouTube where the users can upload more than just videos.
 
 
-
+--
 PROJECT LINKS:
 
 Site URL: https://ahmed16r.myweb.cs.uwindsor.ca/hoardboard.com/
@@ -31,7 +30,7 @@ Site URL: https://ahmed16r.myweb.cs.uwindsor.ca/hoardboard.com/
 Team Management Tool: Teamwork (https://1623879748125.teamwork.com/#/projects/773967/tasks)
 
 
-
+--
 HOW THIS PROJECT WAS BUILT:
 
 This website consists of 50+ dynamic pages and 10 static pages.
@@ -50,7 +49,7 @@ For the backend development, we used the following:
 -- 
 
 
-
+--
 PROJECT INITIALIZATION INSTRUCTIONS:
 
 There are a few things that need to be done before beginning this project. Before getting started, please make sure of the following:
@@ -66,7 +65,7 @@ There are a few things that need to be done before beginning this project. Befor
 5. Start running the React app by entering: "npm start". The app should then automatically open in your browser.
 
 
-
+--
 WHAT COMES NEXT:
 
 Now that the project is initialized, we can begin building the website in the React environment.
@@ -74,7 +73,7 @@ Now that the project is initialized, we can begin building the website in the Re
 Additional instructions are provided in more specialized documentation files for each section.
 
 
-
+--
 SOURCE CODE FILES:
 
 Frontend:
@@ -82,7 +81,7 @@ Frontend:
 Backend:
 
 
-
+--
 OTHER DOCUMENTATION FILES:
 
 Frontend:
