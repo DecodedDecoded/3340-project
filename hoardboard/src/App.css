@@ -1,3 +1,7 @@
 .App {
     display: flex;/* so that they are displayed horizontally with flexbox */
 }
+
+.app__page {
+    flex: 80%;
+}
