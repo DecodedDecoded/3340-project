@@ -1,24 +1,25 @@
 <?php 
-    if(!empty($_POST["reg_button"])){
-        // Remove html tags for security to avoid malicious code
-        // Remove spaces at ends & uppercase first letter
-        function cleanInput($inputVar) {
-            $inputVar = strip_tags($inputVar);
-            $inputVar = trim($inputVar);
-            $inputVar  = strtolower($inputVar);
-            $inputVar = ucfirst($inputVar);
-            return $inputVar;
-        }
-        
-        // Get values from POST
-        $reg_firstname = cleanInput($_POST["fname"]);
-        $reg_lastname = cleanInput($_POST["lname"]);
-        $reg_email = $_POST["email"];
-        $em_confirm = $_POST["email_vrfy"];
-        $reg_password = $_POST["password"];
-        $pw_confirm = $_POST["password_vrfy"];
+    // Get functions
+    require_once "InputCleaner.php";
+    require_once "Users.php";
+    require_once "ErrorMessages.php";
 
-       
+    // Create Users object to store data
+    $creds = "test";
+    $usr = new Users($creds);
+
+    if(!empty($_POST["reg_button"])){
+        // Get values from POST
+        $reg_firstname = InputCleaner::cleanName($_POST["fname"]);
+        $reg_lastname = InputCleaner::cleanName($_POST["lname"]);
+        $reg_username = InputCleaner::cleanUsername($_POST["username"]);
+        $reg_email = InputCleaner::cleanEmail($_POST["email"]);
+        $em_confirm = InputCleaner::cleanEmail($_POST["email_vrfy"]);
+        $reg_password = InputCleaner::cleanPassword($_POST["password"]);
+        $pw_confirm = InputCleaner::cleanPassword($_POST["password_vrfy"]);
+
+        // Store data
+        $usr->addUser($reg_firstname, $reg_lastname, $reg_username, $reg_email, $em_confirm, $reg_password, $pw_confirm);
     }
 ?>
 <!DOCTYPE html>
@@ -50,10 +51,12 @@
 
                 <!-- container for registration form -->
                 <div class="register__form">
+
                     <!-- Submit form for input fields, all fields must be filled before submission -->
                     <form class="register__fields" method="post" action="<?php echo htmlspecialchars("register.php");?>">
 
                         <!-- First name. 'required' keyword prevents form from submitting if empty -->
+                        <?php echo $usr->getErr(ErrorMessages::$firstNameError); ?>
                         <input type="text" name="fname" placeholder="Your first name" required>
 
                         <!-- Last name -->
