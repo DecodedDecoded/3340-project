@@ -7,6 +7,7 @@ class VideoProcessor{
 
     public function __construct($sqlcon){
         $this->sqlcon = $sqlcon;
+        $this->ffmpegPath = realpath("ffmpeg/windows/ffmpeg.exe");
     }
 
     public function upload($mediaUploadData){
@@ -31,14 +32,17 @@ class VideoProcessor{
            if($lowercased == "mp4" || $lowercased == "flv" || $lowercased == "webm" || $lowercased == "mkv" || $lowercased == "vob" || $lowercased == "ogv" || $lowercased == "ogg" || $lowercased =="avi" || $lowercased =="wmv" || $lowercased =="mov" || $lowercased =="mpeg" || $lowercased =="mpg")
             {
                 //File is a video
-                $finalFilePath = $targetDir . uniqid() . ".mp4";
-                if(!$this->insertMediaData($mediaUploadData, $finalFilePath)){
+                if(!$this->insertMediaData($mediaUploadData, $tempFilePath)){
                     echo "Insert query failed";
                     return false;
                 }
             }
             else{
                 //File is a photo
+                if(!$this->insertMediaData($mediaUploadData, $tempFilePath)){
+                    echo "Insert query failed";
+                    return false;
+                }
             }
             
 
@@ -83,5 +87,7 @@ class VideoProcessor{
 
         return $this->sqlcon->query($SQL);
     }
+
+    
 }
 ?>
