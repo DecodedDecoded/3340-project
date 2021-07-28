@@ -1,3 +1,21 @@
+<?php 
+    if(!empty($_POST["reg_button"])){
+         // Remove html tags for security to avoid malicious code
+         function cleanInput($inputVar) {
+            $inputVar = strip_tags($inputVar);
+        }
+        
+        // Get values from POST
+        $reg_firstname = cleanInput($_POST["fname"]);
+        $reg_lastname = cleanInput($_POST["lname"]);
+        $reg_email = cleanInput($_POST["email"]);
+        $em_confirm = cleanInput($_POST["email_vrfy"]);
+        $reg_password = cleanInput($_POST["password"]);
+        $pw_confirm = cleanInput($_POST["password_vrfy"]);
+
+       
+    }
+?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -52,7 +70,7 @@
                         <input type="password" name="password_vrfy" placeholder="Confirm password" required>
                     
                         <!-- Submit button -->
-                        <input type="submit" name="reg_submit" value="Submit">
+                        <input type="submit" name="reg_button" value="Submit">
                     </form>
                 </div>
                 
