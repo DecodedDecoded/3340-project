@@ -20,17 +20,22 @@
             $this->validatePassword($pw, $pwvrf);
         }
 
-        private function validateFirst($fn)
-        {
+        private function validateFirst($fn) {
             // make sure first name is between 1 and 30 characters long
             if(strlen($fn) < 1 || strlen($fn) > 30) {
                 array_push($this->errors, ErrorMessages::$firstNameError);
             }
         }
 
+        public function getErr($error) {
+            if(in_array($error, $this->errors)){
+                return "<span class=\"errorMessage\">$error</span>";
+            }
+        }
+
         private function validateLast($ln)
         {
-            # code...
+            
         }
 
         private function validateUsername($un)
