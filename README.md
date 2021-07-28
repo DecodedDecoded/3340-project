@@ -3,7 +3,7 @@ COMP-3340 Project Team 1 - General Project Documentation
 
 Last updated: July 27, 2021
 
-
+--
 
 TEAM 1 GROUP MEMBERS:
 
