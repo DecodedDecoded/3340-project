@@ -2,6 +2,8 @@
     if(!empty($_POST["reg_button"])){
         // Get functions to clean input
         require_once "InputCleaner.php";
+        require_once "Users.php";
+        require_once "ErrorMessages.php";
         
         // Get values from POST
         $reg_firstname = InputCleaner::cleanName($_POST["fname"]);
@@ -11,6 +13,12 @@
         $em_confirm = InputCleaner::cleanEmail($_POST["email_vrfy"]);
         $reg_password = InputCleaner::cleanPassword($_POST["password"]);
         $pw_confirm = InputCleaner::cleanPassword($_POST["password_vrfy"]);
+
+        // Create Users object to store data
+        $usr = new Users($con);
+
+        // Store data
+        $usr->addUser($reg_firstname, $reg_lastname, $reg_username, $reg_email, $em_confirm, $reg_password, $pw_confirm);
     }
 ?>
 <!DOCTYPE html>
