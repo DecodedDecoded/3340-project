@@ -88,6 +88,25 @@ class VideoProcessor{
         return $this->sqlcon->query($SQL);
     }
 
+    private function deleteFile($filePath){
+        if(unlink($filePath)){
+            echo "Could not delete file\n";
+            return false;
+        }
+
+        return true;
+    }
+
+        //Create thumbnail table - id, mediaid(int), filePath(varchar 250), selected(int)
+
+        //todo
+    public function generateThumbnails($filePath){
+        $thumbnailSize = "210x118";
+        $numThumbnails = 3;
+        $pathToThumbnail = "";
+    }
+
+    
     
 }
 ?>
