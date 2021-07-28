@@ -1,0 +1,15 @@
+****** HOW TO UPLOAD CONTENT *****************
+
+1. Click the Upload icon on the top bar.
+
+2. CLick the button "Choose File" and then select the media you would like to upload from File Explorer.
+
+3. Input your title in the field provided.
+
+4.Input your description.
+
+5. Select your privacy setting (public or private).
+
+6. Select your category from the dropdown menu.
+
+7. Click "Upload" to upload your content.
