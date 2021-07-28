@@ -28,7 +28,7 @@
                 <!-- container for registration form -->
                 <div class="register__form">
                     <!-- Submit form for input fields, all fields must be filled before submission -->
-                    <form action="register__fields" method="post" action="<?php echo htmlspecialchars("register.php");?>">
+                    <form class="register__fields" method="post" action="<?php echo htmlspecialchars("register.php");?>">
 
                         <!-- First name. 'required' keyword prevents form from submitting if empty -->
                         <input type="text" name="fname" placeholder="Your first name" required>
@@ -40,16 +40,16 @@
                         <input type="text" name="username" placeholder="Your username" required>
                         
                         <!-- Email -->
-                        <input type="text" name="email" placeholder="Your email address" required>
+                        <input type="email" name="email" placeholder="Your email address" required>
                         
                         <!-- Confirm email -->
-                        <input type="text" name="email_vrfy" placeholder="Confirm email address" required>
+                        <input type="email" name="email_vrfy" placeholder="Confirm email address" required>
                         
                         <!-- Password -->
-                        <input type="text" name="password" placeholder="Your password" required>
+                        <input type="password" name="password" placeholder="Your password" required>
                         
                         <!-- Confirm password -->
-                        <input type="text" name="password_vrfy" placeholder="Confirm password" required>
+                        <input type="password" name="password_vrfy" placeholder="Confirm password" required>
                     
                         <!-- Submit button -->
                         <input type="submit" name="reg_submit" value="Submit">

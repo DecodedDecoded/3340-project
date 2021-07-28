@@ -30,7 +30,7 @@
     overflow-y: auto;
 }
 
-/**/
+/* CSS for register header container */
 .register__header {
     padding: 20px 0px;
 }
@@ -52,4 +52,36 @@ img {
 
 span {
     font-size: 14px;
+}
+
+/* Make input fields distribute horizontally in form */
+.register__fields {
+    display: flex;
+    flex-direction: column;
+}
+
+/* CSS for input fields */
+.register__fields > input {
+    font-size: 14px;
+    margin: 10px 0px;
+    border: none;
+    border-bottom: 1px solid #dedede;
+}
+
+/* CSS for submit button */
+.register__fields > input[type="submit"] {
+   /* background: #4285f4;
+    color: white;
+    height: 36px;
+    width: 88px;*/
+    border-radius: 3px;/* corner curves */
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+/* CSS for link to login page */
+.login_link {
+    font-size: 14px;
+    font-weight: 400;
+    color: green;
 }
