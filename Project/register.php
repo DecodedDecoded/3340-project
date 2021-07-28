@@ -9,22 +9,56 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     </head>
     <body>
+        <!-- container for entire page -->
+        <div class="register__container">
+            <!-- container for registration box in center -->
+            <div class="register__box">
+                <!-- container for header above input form -->
+                <div class="register__header">
+                    <!-- Website Logo -->
+                    <a class="logo__container" href="index.php">
+                        <img src="imgs/VideoTubeLogo.png" title="logo" alt="Site Logo">
+                    </a>
 
-    <div class="register__container">
-        <div class="register__box">
-            <div class="register__header">
-                <!-- Website Logo -->
-                <a class="logo__container" href="index.php">
-                    <img src="imgs/VideoTubeLogo.png" title="logo" alt="Site Logo">
-                </a>
+                    <!-- Message -->
+                    <h3 class="reg__tag">Register Account</h3>
+                    <span>to join the Hoard!</span>
+                </div>
 
-                <!-- Message -->
-                <h3 class="reg__tag">Register Account</h3>
-                <span>to join the Hoard!</span>
+                <!-- container for registration form -->
+                <div class="register__form">
+                    <!-- Submit form for input fields, all fields must be filled before submission -->
+                    <form action="register__fields" method="post" action="<?php echo htmlspecialchars("register.php");?>">
+
+                        <!-- First name. 'required' keyword prevents form from submitting if empty -->
+                        <input type="text" name="fname" placeholder="Your first name" required>
+
+                        <!-- Last name -->
+                        <input type="text" name="lname" placeholder="Your last name" required>
+                        
+                        <!-- Username -->
+                        <input type="text" name="username" placeholder="Your username" required>
+                        
+                        <!-- Email -->
+                        <input type="text" name="email" placeholder="Your email address" required>
+                        
+                        <!-- Confirm email -->
+                        <input type="text" name="email_vrfy" placeholder="Confirm email address" required>
+                        
+                        <!-- Password -->
+                        <input type="text" name="password" placeholder="Your password" required>
+                        
+                        <!-- Confirm password -->
+                        <input type="text" name="password_vrfy" placeholder="Confirm password" required>
+                    
+                        <!-- Submit button -->
+                        <input type="submit" name="reg_submit" value="Submit">
+                    </form>
+                </div>
+                
+                <!-- Link to login if you already have an acct -->
+                <a class="login_link" href="register.php">You already exist? Log In</a>
             </div>
-            <div class="register__form"></div>
-            <a class="register__message" href="register.php">Log In</a>
         </div>
-    </div>
     </body>
 </html>
