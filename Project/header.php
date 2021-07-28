@@ -16,15 +16,18 @@
 
         <!--Div to handle everything in the header -->
         <div id="mastHeadContainer">
-            <!-- Menu Button -->
-            <button class="navShowHide"> 
-                <img src="imgs/menu.png">
-            </button>
 
-            <!-- Website Logo -->
-            <a class="logoContainer" href="index.php">
-                <img src="imgs/logo.png" title="logo" alt="Site Logo">
-            </a>
+            <div class="left_container">
+                <!-- Menu Button -->
+                <button class="navShowHide"> 
+                    <img src="imgs/menu.png">
+                </button>
+
+                <!-- Website Logo -->
+                <a class="logoContainer" href="index.php">
+                    <img src="imgs/logo.png" title="logo" alt="Site Logo">
+                </a>
+            </div>
 
             <!-- Handles the search bar input and buttons -->
             <div class="searchBarContainer">

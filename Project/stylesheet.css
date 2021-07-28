@@ -16,18 +16,19 @@ a:hover{
 }
 
 #mastHeadContainer{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     width: 100%;
     height: 56px;
-    position: fixed;
+    position: sticky;
     top: 0;
     left: 0;
     padding: 7px 16px;
     box-sizing: border-box;
     border-bottom: 1px solid #e8e8e8;
     background-color: #fff;
-    z-index: 1;
-    display: flex;
-    align-items: center;
+    z-index: 100;
 }
 #mastHeadContainer button:not(.searchButton),
 #mastHeadContainer .rightIcons img{
