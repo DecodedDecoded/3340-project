@@ -1,17 +1,22 @@
 <?php 
     if(!empty($_POST["reg_button"])){
-         // Remove html tags for security to avoid malicious code
-         function cleanInput($inputVar) {
+        // Remove html tags for security to avoid malicious code
+        // Remove spaces at ends & uppercase first letter
+        function cleanInput($inputVar) {
             $inputVar = strip_tags($inputVar);
+            $inputVar = trim($inputVar);
+            $inputVar  = strtolower($inputVar);
+            $inputVar = ucfirst($inputVar);
+            return $inputVar;
         }
         
         // Get values from POST
         $reg_firstname = cleanInput($_POST["fname"]);
         $reg_lastname = cleanInput($_POST["lname"]);
-        $reg_email = cleanInput($_POST["email"]);
-        $em_confirm = cleanInput($_POST["email_vrfy"]);
-        $reg_password = cleanInput($_POST["password"]);
-        $pw_confirm = cleanInput($_POST["password_vrfy"]);
+        $reg_email = $_POST["email"];
+        $em_confirm = $_POST["email_vrfy"];
+        $reg_password = $_POST["password"];
+        $pw_confirm = $_POST["password_vrfy"];
 
        
     }
