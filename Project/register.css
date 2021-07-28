@@ -22,6 +22,9 @@
     max-height: 100%;
     width: 300px;
 
+    /* give border rounded edges */
+    border-radius: 10px;
+
     /* 20px top & bottom, 35px left & right */
     padding: 20px 35px;
     box-shadow: rgba(0, 0, 0, 0.1) 0 1px 2px;
@@ -32,7 +35,7 @@
 
 /* CSS for register header container */
 .register__header {
-    padding: 20px 0px;
+    padding: 20px 30px;
 }
 
 /* Make sure logo image is small */
@@ -58,6 +61,7 @@ span {
 .register__fields {
     display: flex;
     flex-direction: column;
+    padding: 0px 30px;
 }
 
 /* CSS for input fields */
@@ -74,7 +78,7 @@ span {
     color: white;
     height: 36px;
     width: 88px;*/
-    border-radius: 3px;/* corner curves */
+    border-radius: 5px;/* gives corners curves */
     margin-top: 10px;
     margin-bottom: 20px;
 }
@@ -84,4 +88,5 @@ span {
     font-size: 14px;
     font-weight: 400;
     color: green;
+    padding-left: 30px;
 }
