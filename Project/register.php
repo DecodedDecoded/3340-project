@@ -17,7 +17,7 @@
                 <div class="register__header">
                     <!-- Website Logo -->
                     <a class="logo__container" href="index.php">
-                        <img src="imgs/VideoTubeLogo.png" title="logo" alt="Site Logo">
+                        <img src="imgs/logo.png" title="logo" alt="Site Logo">
                     </a>
 
                     <!-- Message -->

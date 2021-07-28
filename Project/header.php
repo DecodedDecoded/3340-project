@@ -23,7 +23,7 @@
 
             <!-- Website Logo -->
             <a class="logoContainer" href="index.php">
-                <img src="imgs/VideoTubeLogo.png" title="logo" alt="Site Logo">
+                <img src="imgs/logo.png" title="logo" alt="Site Logo">
             </a>
 
             <!-- Handles the search bar input and buttons -->
