@@ -25,7 +25,23 @@ class VideoProcessor{
         }
 
         if(move_uploaded_file($mediaData['tmp_name'], $tempFilePath)){
-            echo "File moved successfully";
+            
+            $mediaType = pathinfo($tempFilePath, PATHINFO_EXTENSION);
+            $lowercased = strtolower($mediaType);
+           if($lowercased == "mp4" || $lowercased == "flv" || $lowercased == "webm" || $lowercased == "mkv" || $lowercased == "vob" || $lowercased == "ogv" || $lowercased == "ogg" || $lowercased =="avi" || $lowercased =="wmv" || $lowercased =="mov" || $lowercased =="mpeg" || $lowercased =="mpg")
+            {
+                //File is a video
+                $finalFilePath = $targetDir . uniqid() . ".mp4";
+                if(!$this->insertMediaData($mediaUploadData, $finalFilePath)){
+                    echo "Insert query failed";
+                    return false;
+                }
+            }
+            else{
+                //File is a photo
+            }
+            
+
         }
     }
 
@@ -59,6 +75,13 @@ class VideoProcessor{
 
     private function hasError($data){
         return $data['error'] != 0;
+    }
+
+    private function insertMediaData($uploadData, $filePath){
+        //Create media table - 10 columns: id, uploadedBy(VARHCAR 50), title (varchar 70), description (varchar 1000), privacy (int DEFAULT=0), filePath(varchar 250), category(int DEFAULT=0), uploadDate(DATETIME DEFUALT=CURRENT_TIMESTAMP), views(int DEFAULT=0), duration?, filetype?  
+        $SQL = "INSERT INTO media(title, uploadedBy, description, privacy, category, filePath) VALUES($uploadData->title, $uploadData->uploadedBy, $uploadData->description, $uploadData->privacy, $uploadData->category, $filePath)";
+
+        return $this->sqlcon->query($SQL);
     }
 }
 ?>
