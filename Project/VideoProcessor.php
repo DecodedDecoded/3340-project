@@ -115,7 +115,7 @@ class VideoProcessor{
 
     private function insertThumbnail($filePath) {
         $videoId = $this->sqlcon->insert_id;
-        $SQL = "INSERT INTO thumbnails (videoid, filePath) VALUES ('$videoId', '$filePath')";
+        $SQL = "INSERT INTO thumbnails (videoId, filePath) VALUES ('$videoId', '$filePath')";
         return $this->sqlcon->query($SQL);
     }
 
