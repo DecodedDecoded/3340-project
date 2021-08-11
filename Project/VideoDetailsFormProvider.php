@@ -12,6 +12,7 @@ class VideoDetailsFormProvider{
     //Creates upload form html
     public function createUploadForm(){
         $fileInput = $this->createFileInput();
+        $fileInput2 = $this->createFile2Input();
         $titleInput = $this->createTitleInput();
         $descriptionInput = $this->createDescriptionInput();
         $privacyInput = $this->createPrivacyInput();
@@ -19,6 +20,7 @@ class VideoDetailsFormProvider{
         $uploadButton = $this->createUploadButton();
         return "<form action='processing.php' method='POST' enctype='multipart/form-data'>
                     $fileInput
+                    $fileInput2
                     $titleInput
                     $descriptionInput
                     $privacyInput
@@ -36,10 +38,18 @@ class VideoDetailsFormProvider{
                 </div>";
     }
 
+    private function createFile2Input(){
+
+        return "<div class='form-group'>
+                    <label for='exampleFormControlFile2'>Thumbnail for your video:</label>
+                    <input type='file' class='form-control-file' id='exampleFormControlFile2' name='file2Input' required>
+                </div>";
+    }
+
     //Creates the title input portion of form
     private function createTitleInput(){
         return "<div class='form-group'>
-                    <input class='form-control' type='text' placeholder='Title' name='titeInput'>
+                    <input class='form-control' type='text' placeholder='Title' name='titleInput'>
                 </div>";
 
         

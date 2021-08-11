@@ -1,15 +1,17 @@
 <?php
 class VideoProcessor{
 
+    //Variables Needed for this class
     private $sqlcon;
     private $sizeLimit = 500000000;
-    private $allowedTypes = array("mp4", "flv", "webm", "mkv", "vob", "ogv", "ogg", "avi", "wmv", "mov", "mpeg", "mpg", "png", "jpg", "jpeg");
+    private $allowedTypes = array("mp4", "png", "jpg", "jpeg");
 
+    //Class constructor
     public function __construct($sqlcon){
         $this->sqlcon = $sqlcon;
-        $this->ffmpegPath = realpath("ffmpeg/windows/ffmpeg.exe");
     }
 
+    //upload function will upload the media after validation to specified directory in myweb
     public function upload($mediaUploadData){
 
         $targetDir = "uploads/media/";
@@ -20,6 +22,11 @@ class VideoProcessor{
         $tempFilePath = str_replace(" ", "_", $tempFilePath);
 
         $isValidData = $this->processData($mediaData, $tempFilePath);
+
+
+        $thumbnailDir = "uploads/media/thumbnails/";
+        $thumbnail = $mediaUploadData->thumbnail;
+        $thumbnailPath = $thumbnailDir . uniqid() . basename($thumbnail['name']);
 
         if(!$isValidData){
             return false;
@@ -36,6 +43,14 @@ class VideoProcessor{
                     echo "Insert query failed";
                     return false;
                 }
+
+                //thumbnail
+                if(move_uploaded_file($thumbnail['tmp_name'], $thumbnailPath)){
+                    if(!$this->insertThumbnail($thumbnailPath)){
+                        echo "Insert query failed";
+                        return false;
+                    }
+                }
             }
             else{
                 //File is a photo
@@ -44,11 +59,13 @@ class VideoProcessor{
                     return false;
                 }
             }
-            
+                
+            return true;
 
         }
     }
 
+    //Validates the data of the media uploaded
     private function processData($mediaData, $filePath){
         $mediaType = pathinfo($filePath, PATHINFO_EXTENSION);
 
@@ -83,8 +100,7 @@ class VideoProcessor{
 
     private function insertMediaData($uploadData, $filePath){
         //Create media table - 10 columns: id, uploadedBy(VARHCAR 50), title (varchar 70), description (varchar 1000), privacy (int DEFAULT=0), filePath(varchar 250), category(int DEFAULT=0), uploadDate(DATETIME DEFUALT=CURRENT_TIMESTAMP), views(int DEFAULT=0), duration?, filetype?  
-        $SQL = "INSERT INTO media(title, uploadedBy, description, privacy, category, filePath) VALUES($uploadData->title, $uploadData->uploadedBy, $uploadData->description, $uploadData->privacy, $uploadData->category, $filePath)";
-
+        $SQL = "INSERT INTO media (title, uploadedBy, description, privacy, category, filePath) VALUES ('$uploadData->title', '$uploadData->uploadedBy', '$uploadData->description', '$uploadData->privacy', '$uploadData->category', '$filePath')";
         return $this->sqlcon->query($SQL);
     }
 
@@ -97,13 +113,10 @@ class VideoProcessor{
         return true;
     }
 
-        //Create thumbnail table - id, mediaid(int), filePath(varchar 250), selected(int)
-
-        //todo
-    public function generateThumbnails($filePath){
-        $thumbnailSize = "210x118";
-        $numThumbnails = 3;
-        $pathToThumbnail = "";
+    private function insertThumbnail($filePath) {
+        $videoId = $this->sqlcon->insert_id;
+        $SQL = "INSERT INTO thumbnails (videoid, filePath) VALUES ('$videoId', '$filePath')";
+        return $this->sqlcon->query($SQL);
     }
 
     

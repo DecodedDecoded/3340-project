@@ -1,4 +1,26 @@
-<?php require_once("db_creds.php"); ?>
+<?php 
+require_once("db_creds.php");
+require_once("Account.php");
+require_once("Media.php");
+require_once("VideoGrid.php");
+require_once("ButtonProvider.php");
+require_once("VideoGridItem.php");
+require_once("NavigationMenuProvider.php");
+require_once("FollowingProvider.php");
+
+
+
+
+//If user is not logged in set it to null
+if(Account::isLoggedIn()) {
+    $usernameLoggedIn = $_SESSION["userLoggedIn"];
+}
+else {
+    $usernameLoggedIn = "";
+}
+$userLoggedInObj = new Account($sqlcon, $usernameLoggedIn);
+
+?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -10,6 +32,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
         <script src="commonActions.js"></script>
+        <script src="userActions.js"></script>
     </head>
 <body>
 
@@ -51,15 +74,16 @@
                     <img class="upload" src="imgs/upload.png" title="upload" alt="Upload">
                 </a>
 
-                <a href="login.php">
-                    <img class="upload" src="imgs/default.png" title="profile" alt="Profile Picture">
-                </a>
+                <?php echo ButtonProvider::createUserProfileNavigationButton($sqlcon, $userLoggedInObj->getUsername()); ?>
             </div>
         </div>
 
         <!--Div to handle everything in the side navigation bar -->
         <div id="sideNavContainer" style="display:none;">
-
+            <?php
+            $navigationProvider = new NavigationMenuProvider($sqlcon, $userLoggedInObj);
+            echo $navigationProvider->create();
+            ?>
         </div>
 
         <!--Div to handle everything in the main section -->

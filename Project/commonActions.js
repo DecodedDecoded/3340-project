@@ -18,3 +18,7 @@ $(document).ready(function(){
     });
 
 });
+
+function notSignedIn() {
+    alert("You have to be signed in to like videos!");
+}

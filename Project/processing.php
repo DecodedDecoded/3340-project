@@ -11,10 +11,15 @@ if(!isset($_POST['uploadButton']))
 }
 
 //Create a file upload data object
-$mediaUploadData = new VideoUploadData($_FILES['fileInput'], $_POST['titleInput'], $_POST['descriptionInput'], $_POST['privacyInput'], $_POST['categoryInput'], "REPLACETHIS");
+$mediaUploadData = new VideoUploadData($_FILES['fileInput'], $_FILES['file2Input'], $_POST['titleInput'], $_POST['descriptionInput'], $_POST['privacyInput'], $_POST['categoryInput'], $userLoggedInObj->getUsername());
 
 //Process the media data
 $mediaProcessor = new VideoProcessor($sqlcon);
 $wasSuccessful = $mediaProcessor->upload($mediaUploadData);
+
+//Check if upload was successful
+if($wasSuccessful){
+    echo "Upload successful";
+}
 
 ?>

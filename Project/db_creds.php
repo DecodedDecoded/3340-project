@@ -1,9 +1,10 @@
 <?php
+    session_start();
     // Get the MySQL connection info
     $servername = "localhost";
-    $username = "ahmed16r_project3340";
-    $password = "D3c0d3dD3c0d3d";
-    $db = "ahmed16r_project3340";
+    $username = "longo114_FinalProject";
+    $password = "test";
+    $db = "longo114_FinalProject";
 
     // launch the connection
     $sqlcon = mysqli_connect($servername, $username, $password, $db);

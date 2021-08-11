@@ -1,3 +1,33 @@
+<?php 
+    require_once("db_creds.php");
+    require_once("InputCleaner.php");
+    require_once("Users.php");
+    require_once("ErrorMessages.php");
+
+$user = new Users($sqlcon);
+
+if(isset($_POST["reg_submit"])){
+
+    $username = InputCleaner::cleanUsername($_POST["username"]);
+    $password = InputCleaner::cleanPassword($_POST["password"]);
+
+    $wasSuccessful = $user->login($username, $password);
+
+
+    if($wasSuccessful) {
+        $_SESSION["userLoggedIn"] = $username;
+        header("Location: index.php");
+    }
+
+}
+
+function getInputValue($name) {
+    if(isset($_POST[$name])) {
+        echo $_POST[$name];
+    }
+}
+
+?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -28,12 +58,10 @@
                 <!-- container for registration form -->
                 <div class="login__form">
                     <!-- Submit form for input fields, all fields must be filled before submission -->
-                    <form class="login__fields" method="post" action="<?php echo htmlspecialchars("login.php");?>">
+                    <form class="login__fields" method="POST" action="login.php">
                         <!-- Username. 'required' keyword prevents form from submitting if empty -->
-                        <input type="text" name="username" placeholder="Your username" required>
-                        
-                        <!-- Email -->
-                        <input type="email" name="email" placeholder="Your email address" required>
+                        <?php echo $user->getErr(ErrorMessages::$loginFailed); ?>
+                        <input type="text" name="username" placeholder="Your username" value="<?php getInputValue('username'); ?>" required>
                         
                         <!-- Password -->
                         <input type="password" name="password" placeholder="Your password" required>

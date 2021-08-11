@@ -5,6 +5,9 @@ body{
     margin: 0;
 }
 
+a {
+    text-decoration: none;
+}
 a:hover{
     text-decoration: none;
 }
@@ -58,8 +61,6 @@ a:hover{
     height: 25px;
     margin-left: 8px;
 }
-
-
 
 #sideNavContainer {
     width: 240px;
@@ -135,4 +136,291 @@ a:hover{
     min-height: 300px;
     padding: 20px;
     box-shadow: rgba(0, 0, 0, 0.1) 0 1px 2px;
+}
+
+.watchLeftColumn {
+    flex: 1;
+}
+
+.watchLeftColumn .videoPlayer{
+    width: 100%;
+}
+
+.suggestions {
+    max-width: 425px;
+    flex-grow: 1;
+    height: 100;
+    padding-left: 24px;
+}
+
+.videoInfo {
+    width: 100%;
+    padding: 20px 0 8px 0;
+}
+
+.videoInfo h1 {
+    display: block;
+    overflow: hidden;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 24px;
+}
+
+.videoInfo .bottomSection {
+    display:flex;
+}
+
+.videoInfo .bottomSection .viewCount {
+    color: rgba(17, 17, 17, 0.6);
+    font-size: 16px;
+    flex: 1;
+}
+
+.videoInfo .bottomSection .controls {
+    flex: 1;
+    text-align: right;
+}
+
+.videoInfo .bottomSection .controls button {
+    padding: 0;
+    background-color: transparent;
+    border: none;
+    color: rgba(17, 17, 17, 0.4);
+    font-weight: 500;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.videoInfo .bottomSection .controls button img {
+    height: 20px;
+    width: 20px;
+    margin: 4px 8px 8px 8px;
+}
+
+.secondaryInfo .topRow {
+    display: flex;
+    margin-bottom: 12px;
+}
+
+.profilePicture {
+    height: 100%;
+}
+
+.secondaryInfo .topRow .profilePicture {
+    margin-right: 16px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+}
+
+.secondaryInfo .topRow .uploadInfo {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    margin-right: 10px;
+}
+
+.secondaryInfo .topRow .uploadInfo .date {
+    color: rgba(17, 17, 17, 0.6);
+    font-size: 13px;
+    font-weight: 400;
+}
+
+.secondaryInfo .descriptionContainer {
+    margin-left: 64px;
+    max-width: 615px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 21px;
+}
+
+.secondaryInfo {
+    border-bottom: 1px solid #dedede;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+}
+
+.secondaryInfo .topRow .button{
+    padding: 6px 15px;
+    cursor: pointer;
+    font-weight: 500;
+    border-radius: 2px;
+    border: none;
+    font-size: 14px;
+}
+
+.secondaryInfo .topRow .followButtonContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.followButtonContainer .follow {
+    background-color: rgba(166, 74, 199);
+    color:#fff;
+}
+
+.followButtonContainer .unfollow {
+    background-color: #eee;
+    color:rgba(17, 17, 17, 0.6);
+}
+
+.secondaryInfo .topRow .uploadInfo .owner a {
+    font-size: 14px;
+    font-weight: 500;
+    color: black;
+ }
+
+.videoGrid {
+    display: flex;
+    flex-wrap: wrap;
+ }
+
+.suggestions .videoGridItem {
+    display: flex;
+    height: auto;
+ }
+
+.videoGridItem {
+    margin-right: 4px;
+    margin-bottom: 24px;
+ }
+
+.videoGridItem .thumbnail {
+    width: 210px;
+    height: 118px;
+}
+
+.videoGridItem .thumbnail .img {
+    width: 100%;
+    height: 100%;
+}
+
+.suggestions .videoGridItem .thumbnail {
+    margin-right: 8px;
+}
+
+.videoGridItem .details {
+    padding-right: 24px;
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    width: 210px;
+}
+
+.suggestions .videoGridItem .details {
+    padding-right: 0;
+    flex: 1;
+}
+
+.videoGridItem .details .title {
+    margin: 8px 0;
+    max-height: 32px;
+    overflow: hidden;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 16px;
+    color: black;
+}
+
+.videoGridItem .details .username,
+.videoGridItem .details .stats {
+    color:rgba(17, 17, 17, 0.6);
+    font-size: 13px;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.videoGridHeader {
+    display: flex;
+    margin: 10px 0;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e8e8e8;
+}
+
+.videoGridHeader .div {
+    flex: 1;
+}
+
+.videoGrid.large {
+    flex-direction: column;
+    flex: 1;
+}
+
+.videoGrid.large .videoGridItem {
+    height: auto;
+    display: flex;
+}
+
+.videoGrid.large .videoGridItem .thumbnail {
+    width: 266px;
+    height: 138px;
+    margin-right: 16px;
+}
+
+.videoGrid.large .videoGridItem .details {
+    max-width: 600px;
+}
+
+.videoGrid.large .videoGridItem .details .title{
+    font-size: 18px;
+    line-height: 24px;
+}
+
+.videoGridItem .details .description {
+    color: rgba(17, 17, 17, 0.6);
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.largeVideoGridContainer {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.videoGridHeader .right {
+    text-align: right;
+    float: right;
+}
+
+.videoGridHeader a {
+    color: rgba(17, 17, 17, 0.6);
+}
+
+.signInLink {
+    color: purple;
+}
+
+#sideNavContainer .navigationItems {
+    overflow-y: auto;
+}
+
+#sideNavContainer .navigationItem {
+    height: 40px;
+    display: flex;
+}
+
+#sideNavContainer .navigationItem img {
+    height: 18px;
+    margin-right: 27px;
+}
+
+#sideNavContainer .navigationItem span {
+    flex:1;
+    color:#111;
+    font-size: 14px;
+}
+
+#sideNavContainer .navigationItem a {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+}
+
+#sideNavContainer .navigationItem a:hover {
+    background-color: rgba(0, 0, 0, 0.4);
 }

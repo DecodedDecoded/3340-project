@@ -2,14 +2,13 @@
     class InputCleaner {
         // Functions can be called outside class without making CleanInput object
         
-        //
         public static function cleanName($inputVar) {
             // Remove html tags for security to avoid malicious code
             $inputVar = strip_tags($inputVar);
 
             // Remove spaces at ends & uppercase first letter
             $inputVar = trim($inputVar);
-            $inputVar  = strtolower($inputVar);
+            $inputVar = strtolower($inputVar);
             $inputVar = ucfirst($inputVar);
             
             return $inputVar;
