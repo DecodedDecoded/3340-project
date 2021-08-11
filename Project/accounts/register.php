@@ -40,7 +40,7 @@
                 <!-- container for header above input form -->
                 <div class="register__header">
                     <!-- Website Logo -->
-                    <a class="logo__container" href="../index.php">
+                    <a class="logo__container" href="index.php">
                         <img src="../imgs/logo.png" title="logo" alt="Site Logo">
                     </a>
 
@@ -64,8 +64,7 @@
                         <input type="text" name="lname" placeholder="Your last name" required>
                         
                         <!-- Username -->
-                        <?php echo $usr->getErr(ErrorMessages::$usernameLengthError); ?>
-                        <?php echo $usr->getErr(ErrorMessages::$usernameExistsError); ?>
+                        <?php echo $usr->getErr(ErrorMessages::$usernameError); ?>
                         <input type="text" name="username" placeholder="Your username" required>
                         
                         <!-- Email -->
