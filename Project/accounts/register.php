@@ -41,7 +41,7 @@
                 <div class="register__header">
                     <!-- Website Logo -->
                     <a class="logo__container" href="index.php">
-                        <img src="imgs/logo.png" title="logo" alt="Site Logo">
+                        <img src="../imgs/logo.png" title="logo" alt="Site Logo">
                     </a>
 
                     <!-- Message -->
@@ -60,21 +60,27 @@
                         <input type="text" name="fname" placeholder="Your first name" required>
 
                         <!-- Last name -->
+                        <?php echo $usr->getErr(ErrorMessages::$lastNameError); ?>
                         <input type="text" name="lname" placeholder="Your last name" required>
                         
                         <!-- Username -->
+                        <?php echo $usr->getErr(ErrorMessages::$usernameError); ?>
                         <input type="text" name="username" placeholder="Your username" required>
                         
                         <!-- Email -->
                         <input type="email" name="email" placeholder="Your email address" required>
                         
                         <!-- Confirm email -->
+                        <?php echo $usr->getErr(ErrorMessages::$emailConfirmError); ?>
                         <input type="email" name="email_vrfy" placeholder="Confirm email address" required>
                         
                         <!-- Password -->
+                        <?php echo $usr->getErr(ErrorMessages::$passwordLengthError); ?>
+                        <?php echo $usr->getErr(ErrorMessages::$passwordFormatError); ?>
                         <input type="password" name="password" placeholder="Your password" required>
                         
                         <!-- Confirm password -->
+                        <?php echo $usr->getErr(ErrorMessages::$passwordConfirmError); ?>
                         <input type="password" name="password_vrfy" placeholder="Confirm password" required>
                     
                         <!-- Submit button -->
