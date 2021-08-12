@@ -1,8 +1,8 @@
 <?php
-ob_start(); //Turns on output buffering 
+ob_start(); // Turns on output buffering 
 session_start();
 
-date_default_timezone_set("Europe/Prague");
+date_default_timezone_set("America/Toronto");
 
 try {
     $con = new PDO("mysql:dbname=saksenaa_HoardBoard;host=localhost", "saksenaa_HoardBoard", "1234");

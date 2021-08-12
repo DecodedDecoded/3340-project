@@ -21,7 +21,7 @@ class Account {
     }
 
     public function getName() {
-        return $this->sqlData["firstName"] . $this->sqlData["lastName"];
+        return $this->sqlData["firstName"] . " " . $this->sqlData["lastName"];
     }
 
     public function getFirstName() {
@@ -44,7 +44,7 @@ class Account {
         return $this->sqlData["signUpDate"];
     }
 
-    public function isFollowedTo($userTo) {
+    public function isFollowing($userTo) {
         $username = $this->getUsername();
         $SQL = "SELECT * FROM followers WHERE userTo = '$userTo' AND userFrom='$username'";
         $query = $this->sqlcon->query($SQL);

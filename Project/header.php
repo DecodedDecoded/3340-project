@@ -1,24 +1,28 @@
 <?php 
-require_once("db_creds.php");
-require_once("Account.php");
+// from Don
+require_once("db_creds.php"); // config.php
+require_once("Account.php"); // User.php
 require_once("Media.php");
 require_once("VideoGrid.php");
 require_once("ButtonProvider.php");
 require_once("VideoGridItem.php");
 require_once("NavigationMenuProvider.php");
 require_once("FollowingProvider.php");
+// from Abhilash 
+require_once("includes/classes/Video.php");
+require_once("includes/classes/SubscriptionsProvider.php"); 
 
-
-
-
-//If user is not logged in set it to null
+// If user is not logged in set it to null
 if(Account::isLoggedIn()) {
     $usernameLoggedIn = $_SESSION["userLoggedIn"];
 }
 else {
     $usernameLoggedIn = "";
 }
+// $usernameLoggedIn = User::isLoggedIn() ? $_SESSION["userLoggedIn"] : ""; // simplified - check how it looks in video
+
 $userLoggedInObj = new Account($sqlcon, $usernameLoggedIn);
+// $userLoggedInObj = new User($con, $usernameLoggedIn);
 
 ?>
 <!DOCTYPE html>
@@ -37,11 +41,12 @@ $userLoggedInObj = new Account($sqlcon, $usernameLoggedIn);
 <body>
 
     <!--Main page container -->
-    <div id="pageContainer">
+    <div id="main_container">
 
         <!--Div to handle everything in the header -->
-        <div id="mastHeadContainer">
+        <div id="header_container">
 
+            <!-- container for left-side components -->
             <div class="left_container">
                 <!-- Menu Button -->
                 <button class="navShowHide"> 
@@ -59,7 +64,7 @@ $userLoggedInObj = new Account($sqlcon, $usernameLoggedIn);
                 <!-- Search bar form for PHP -->
                 <form action="search.php" method="GET">
                     <!-- Search bar -->
-                    <input type="text" class="searchBar" name="term" placeholder="Search">
+                    <input type="text" class="searchBar" name="term" placeholder="Search ...">
                     
                     <!-- Search button -->
                     <button class="searchButton">
