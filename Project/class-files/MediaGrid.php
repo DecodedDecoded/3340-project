@@ -1,14 +1,15 @@
 <?php
-class VideoGrid {
+class MediaGrid {
 
-    private $sqlcon, $userLoggedInObj;
-    private $largeMode = false;
-    private $gridClass = "videoGrid";
+    // private vars: sql connection, object that contains login session, 
+    private $sqlcon, $logged_in_user;
+    private $large_mode = false;
+    private $grid_class = "media_grid";
 
 
-    public function __construct($sqlcon, $userLoggedInObj) {
+    public function __construct($sqlcon, $logged_in_user) {
         $this->sqlcon = $sqlcon;
-        $this->userLoggedInObj = $userLoggedInObj;
+        $this->logged_in_user = $logged_in_user;
     }
 
     public function create($videos, $title, $showFilter) {
@@ -26,7 +27,7 @@ class VideoGrid {
             $header = $this->createGridHeader($title, $showFilter);
         }
         return "$header
-                <div class='$this->gridClass'>
+                <div class='$this->grid_class'>
                     $gridItems
                 </div>";
     }
@@ -37,8 +38,8 @@ class VideoGrid {
 
         $elementsHtml = "";
         while($row = $query->fetch_assoc()) {
-            $video = new Media($this->sqlcon, $row, $this->userLoggedInObj);
-            $item = new VideoGridItem($video, $this->largeMode);
+            $video = new Media($this->sqlcon, $row, $this->logged_in_user);
+            $item = new VideoGridItem($video, $this->large_mode);
             $elementsHtml = $elementsHtml . $item->create();
         }
 
@@ -49,7 +50,7 @@ class VideoGrid {
         $elementsHtml ="";
 
         foreach($videos as $video) {
-            $item = new VideoGridItem($video, $this->largeMode);
+            $item = new VideoGridItem($video, $this->large_mode);
             $elementsHtml .= $item->create();
         }
 
@@ -91,8 +92,8 @@ class VideoGrid {
     }
 
     public function createLarge($videos, $title, $showFilter) {
-        $this->gridClass .= " large";
-        $this->largeMode = true;
+        $this->grid_class .= " large";
+        $this->large_mode = true;
         return $this->create($videos, $title, $showFilter);
     }
 }

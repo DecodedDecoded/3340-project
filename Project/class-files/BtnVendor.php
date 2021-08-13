@@ -1,100 +1,104 @@
+<!-- Class to render buttons & provide their functionality methods -->
 <?php 
 class BtnVendor{
+    // function to provide any button functionality
+    // public static $loginFunction = "notSignedIn()";
+    public static function createAction($button_action) {
+        // return button action if user is logged in
+        if(Account::isLoggedIn()) return $button_action;
 
-    public static $signInFunction = "notSignedIn()";
-    public static function createLink($link) {
-        if(Account::isLoggedIn())
-        {
-            return $link;
-        }
-        else {
-            return BtnVendor::$signInFunction;
-        }
+        // if not logged in, return
+        else return BtnVendor::notSignedIn();
     }
 
-    public static function createButton($text, $imageSrc, $action, $class){
-        
-        if($imageSrc == null){
-            $image = "";
-        }
-        else {
-            $image = "<img src='$imageSrc'>";
-        }
+    // function to create any button
+    public static function createButton($text, $img_src, $action, $class){
+        // save image source path
+        if($img_src != null) $img = "<img src='$img_src'>";
+        // if no image source, save empty string
+        else $img = "";
        
-       $action = BtnVendor::createLink($action);
-       
-        return "<button class='$class' onclick='$action'>
-                    $image  
+        // return button functionality
+       $onclick = BtnVendor::createAction($action);
+
+       // return html element for button
+        return "<button class='$class' onclick='$onclick'>
+                    $img  
                     <span class='text'>$text</span>
                 </button>";
     }
 
-    public static function createHyperlinkButton($text, $imageSrc, $href, $class){
-        
-        if($imageSrc == null){
-            $image = "";
-        }
-        else {
-            $image = "<img src='$imageSrc'>";
-        }
+    // function to create any hyperlink
+    public static function createHrefBtn($text, $img_src, $href, $class){
+        // save image source path
+        if($img_src != null) $img = "<img src='$img_src'>";
+        // if no image source, save empty string
+        else $img = "";
        
+        // return html element for hyperlink
         return "<a href='$href'>
-                    <button class='$class' >
-                        $image  
+                    <button class='$class'>
+                        $img  
                         <span class='text'>$text</span>
                     </button>
                 </a>";
     }
 
-    public static function createUserProfileButton($sqlcon, $username) {
-        $userObj = new Account($sqlcon, $username);
-        $profilePic = $userObj->getProfilePic();
+    // create button to user profile
+    public static function createProfileBtn($sqlcon, $username) {
+        $user_object = new Account($sqlcon, $username);
+        $pfp = $user_object->getPfp();
         $link = "profile.php?username=$username";
 
+        // return html element for link to user profile
         return "<a href='$link'>
-                    <img src='$profilePic' class='profilePicture'>
+                    <img src='$pfp' class='profilePicture'>
                 </a>";
     }
 
-    public static function createFollowerButton($sqlcon, $userToObj, $userLoggedInObj) {
-        $userTo = $userToObj->getUsername();
-        $userLoggedIn = $userLoggedInObj->getUsername();
-
-        $isFollowedTo = $userLoggedInObj->isFollowedTo($userToObj->getUsername());
+    // create button to follow user
+    public static function createFollowButton($userTo_object, $logged_in_user) {
+        // check if logged in user is following the user that this button links to
+        $userTo = $userTo_object->getUsername();
+        $current_user = $logged_in_user->getUsername();
+        $isFollowing = $logged_in_user->isFollowing($userTo_object->getUsername());
         
-        if($isFollowedTo){
-            $buttonText = "Following";
+        // change text inside button based on that
+        // button text shows message as well as the creator's number of followers
+        // if user follows content creator, button says 'Following'
+        if($isFollowing) {
+            $buttonText = "Following"  . " " . $userTo_object->getNumFollowers();;
+        }
+        // if not, button says 'Follow'
+        else {
+            $buttonText = "Follow"  . " " . $userTo_object->getNumFollowers();;
+        }
+
+        // set button's class based on whether user follows creator
+        if($isFollowing){
+            $button_class = "unfollow_button";
         }
         else {
-            $buttonText = "Follow";
-        }
-        
-        $buttonText = $buttonText . " " . $userToObj->getFollowersCount();
-
-      
-        if($isFollowedTo){
-            $buttonClass = "unfollow button";
-        }
-        else {
-            $buttonClass = "follow button";
+            $button_class = "follow_button";
         }
 
-        $action = "follow(\"$userTo\", \"$userLoggedIn\", this)";
+        // create follow button
+        $button = BtnVendor::createButton($buttonText, null, "follow(\"$userTo\", \"$current_user\", this)", $button_class);
 
-        $button = BtnVendor::createButton($buttonText, null, $action, $buttonClass);
-
+        // return html element for button
         return "<div class='followButtonContainer'>$button</div>";
-
     }
 
-    public static function createUserProfileNavigationButton($sqlcon, $username) {
+    public static function createProfileNavBtn($sqlcon, $username) {
+        // return button to user's profile - this button is embedded in the user's profile pic
         if(Account::isLoggedIn()) {
-            return BtnVendor::createUserProfileButton($sqlcon, $username);
+            return BtnVendor::createProfileBtn($sqlcon, $username);
         }
 
+        // return hyperlink to login page
         else {
             return "<a href='login.php'>
-                    <span class='signInLink'>SIGN IN</span>
+                    <span class='loginLink'>LOG IN</span>
                     </a>";
         }
     }

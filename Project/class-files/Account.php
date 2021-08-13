@@ -83,7 +83,7 @@ class Account {
     }
 
     // number of followers creator has to display in content info
-    public function getFollowersCount() {
+    public function getNumFollowers() {
         $username = $this->getUsername();
 
         // retrieves any followers creator has
