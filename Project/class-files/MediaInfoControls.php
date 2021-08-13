@@ -1,5 +1,5 @@
 <?php
-require_once("ButtonProvider.php");
+require_once("BtnVendor.php");
 class MediaInfoControls {
    
     private $video, $userLoggedInObj;
@@ -31,7 +31,7 @@ class MediaInfoControls {
             $imageSrc = "imgs/thumb-up-active.png";
         }
 
-        return ButtonProvider::createButton($text, $imageSrc, $action, $class);
+        return BtnVendor::createButton($text, $imageSrc, $action, $class);
     }
 
     private function createDislikeButton(){
@@ -46,7 +46,7 @@ class MediaInfoControls {
             $imageSrc = "imgs/thumb-down-active.png";
         }
 
-        return ButtonProvider::createButton($text, $imageSrc, $action, $class);
+        return BtnVendor::createButton($text, $imageSrc, $action, $class);
     }
 }
 ?>

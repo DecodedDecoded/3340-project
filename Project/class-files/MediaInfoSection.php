@@ -37,7 +37,7 @@ class MediaInfoSection{
         $description = $this->video->getDescription();
         $uploadDate = $this->video->getUploadDate();
         $uploadedBy = $this->video->getUploadedBy();
-        $profileButton = ButtonProvider::createUserProfileButton($this->sqlcon, $uploadedBy);
+        $profileButton = BtnVendor::createUserProfileButton($this->sqlcon, $uploadedBy);
 
         //Will not display follow button if user is viewing their own videos
         if($uploadedBy == $this->userLoggedInObj->getUsername()){
@@ -45,7 +45,7 @@ class MediaInfoSection{
         }
         else {
             $userToObject = new Account($this->sqlcon, $uploadedBy);
-            $actionButton = ButtonProvider::createFollowerButton($this->sqlcon, $userToObject, $this->userLoggedInObj);
+            $actionButton = BtnVendor::createFollowerButton($this->sqlcon, $userToObject, $this->userLoggedInObj);
         }
 
         return "<div class='secondaryInfo'>

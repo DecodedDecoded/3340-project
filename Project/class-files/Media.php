@@ -6,7 +6,7 @@ class Media {
     private $sqlcon, $table_data, $logged_in_user;
 
     // construct
-    public function __construct($sqlcon, $content, $logged_in_user) {
+    public function __construct($sqlcon, $logged_in_user, $content) {
         // stores global variables in local vars
         $this->sqlcon = $sqlcon;
         $this->logged_in_user =  $logged_in_user;
@@ -107,7 +107,7 @@ class Media {
     public function getNumLikes() {
         // get content ID & use to get number of likes on content
         $contentId = $this->getId();
-        $sql_statement = "SELECT count(*) as 'count' FROM likes WHERE videoId='$contentId'";
+        $sql_statement = "SELECT count(*) as 'count' FROM likes WHERE mediaId='$contentId'";
         $sql_qry = $this->sqlcon->query($sql_statement);
 
         // retrieve resulting data
@@ -120,7 +120,7 @@ class Media {
     public function getNumDislikes() {
         // get content ID & use to get number of dislikes on content
         $contentId = $this->getId();
-        $sql_statement = "SELECT count(*) as 'count' FROM dislikes WHERE videoId='$contentId'";
+        $sql_statement = "SELECT count(*) as 'count' FROM dislikes WHERE mediaId='$contentId'";
         $sql_qry = $this->sqlcon->query($sql_statement);
 
         // retrieve results
@@ -133,7 +133,7 @@ class Media {
     public function getNumComments() {
         // get content ID & use to get number of comments
         $contentId = $this->getId();
-        $sql_statement = "SELECT * FROM comments WHERE videoId=$contentId";
+        $sql_statement = "SELECT * FROM comments WHERE mediaId=$contentId";
         $sql_qry = $this->sqlcon->query($sql_statement);
 
         // return number of comment records retrieved
@@ -144,7 +144,7 @@ class Media {
     public function getAllComments() {
         // get content ID & use to get all comments under content
         $contentId = $this->getId();
-        $sql_statement = "SELECT * FROM comments WHERE videoId=$contentId AND responseTo=0 ORDER BY datePosted DESC";
+        $sql_statement = "SELECT * FROM comments WHERE mediaId=$contentId AND responseTo=0 ORDER BY datePosted DESC";
         $sql_qry = $this->sqlcon->query($sql_statement);
 
         // store them in an array
@@ -167,7 +167,7 @@ class Media {
         $username = $this->logged_in_user->getUsername();
 
         // retrieve user's like from database if it exists
-        $sql_statement = "SELECT * FROM likes WHERE username='$username' AND videoId='$contentId'";
+        $sql_statement = "SELECT * FROM likes WHERE username='$username' AND mediaId='$contentId'";
         $sql_qry = $this->sqlcon->query($sql_statement);
 
         // return truth value of whether like exists or not
@@ -180,7 +180,7 @@ class Media {
     }
 
     // method for 'Like' button: adds or removes like from content
-    public function likeContent(){
+    public function likeMedia(){
         // check if user has liked the content already
         $contentId = $this->getId();
         $username = $this->logged_in_user->getUsername();
@@ -188,10 +188,10 @@ class Media {
         // if they have, delete the like from the database
         if($this->LikedByUser()){
             // delete like for this content
-            $sql_statement = "DELETE FROM likes WHERE username='$username' AND videoId='$contentId'";
+            $sql_statement = "DELETE FROM likes WHERE username='$username' AND mediaId='$contentId'";
             $this->sqlcon->query($sql_statement);
 
-            // update likes & dislikes on page
+            // update likes & dislikes on media
             $sql_result = array("likes" => -1, "dislikes" => 0);
             return json_encode($sql_result);
         }
@@ -199,15 +199,15 @@ class Media {
         // if they haven't, add new like & delete dislike if it exists
         else {
             // add new like for this content
-            $sql_statement = "INSERT INTO likes (username, videoId) VALUES ('$username', '$contentId')";
+            $sql_statement = "INSERT INTO likes (username, mediaId) VALUES ('$username', '$contentId')";
             $this->sqlcon->query($sql_statement);
 
             // delete dislike for this content if it exists - cannot both like and dislike same content
-            $sql_statement = "DELETE FROM dislikes WHERE username='$username' AND videoId='$contentId'";
+            $sql_statement = "DELETE FROM dislikes WHERE username='$username' AND mediaId='$contentId'";
             $this->sqlcon->query($sql_statement);
             $count = $this->sqlcon->affected_rows;
             
-            // update likes & dislikes on page
+            // update likes & dislikes on media
             $sql_result = array("likes" => 1, "dislikes" => 0 - $count);
             return json_encode($sql_result);
         }
@@ -222,7 +222,7 @@ class Media {
         $username = $this->logged_in_user->getUsername();
 
         // retrieve dislike from database if it exists
-        $sql_statement = "SELECT * FROM dislikes WHERE username='$username' AND videoId='$contentId'";
+        $sql_statement = "SELECT * FROM dislikes WHERE username='$username' AND mediaId='$contentId'";
         $sql_qry = $this->sqlcon->query($sql_statement);
 
         // return truth value of whether dislike exists or not
@@ -235,7 +235,7 @@ class Media {
     }
 
     // method for 'Dislike' button: adds or removes dislike from content
-    public function dislikeContent(){
+    public function dislikeMedia(){
         //check if user has disliked content already
         $contentId = $this->getId();
         $username = $this->logged_in_user->getUsername();
@@ -243,10 +243,10 @@ class Media {
         // delete from database if exists
         if($this->DislikedByUser()){
             // delete dislike
-            $sql_statement = "DELETE FROM dislikes WHERE username='$username' AND videoId='$contentId'";
+            $sql_statement = "DELETE FROM dislikes WHERE username='$username' AND mediaId='$contentId'";
             $this->sqlcon->query($sql_statement);
 
-            // update likes & dislikes on page
+            // update likes & dislikes on media
             $sql_result = array("likes" => 0, "dislikes" => -1);
             return json_encode($sql_result);
         }
@@ -254,15 +254,15 @@ class Media {
         // add new dislike otherwise, remove like if there
         else {
             // add new dislike
-            $sql_statement = "INSERT INTO dislikes (username, videoId) VALUES ('$username', '$contentId')";
+            $sql_statement = "INSERT INTO dislikes (username, mediaId) VALUES ('$username', '$contentId')";
             $this->sqlcon->query($sql_statement);
 
             // delete like if it exists
-            $sql_statement = "DELETE FROM likes WHERE username='$username' AND videoId='$contentId'";
+            $sql_statement = "DELETE FROM likes WHERE username='$username' AND mediaId='$contentId'";
             $this->sqlcon->query($sql_statement);
             $count = $this->sqlcon->affected_rows;
             
-            // update likes & dislikes on page
+            // update likes & dislikes on media
             $sql_result = array("likes" => 0 - $count, "dislikes" => 1);
             return json_encode($sql_result);
         }

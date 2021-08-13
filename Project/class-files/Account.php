@@ -86,7 +86,7 @@ class Account {
     public function getNumFollowers() {
         $username = $this->getUsername();
 
-        // retrieves any followers creator has
+        // retrieve any followers creator has
         $sql_statement = "SELECT * FROM followers WHERE userTo = '$username'";
         
         // returns number of rows in retrieved table data
@@ -96,6 +96,7 @@ class Account {
 
     // gets array of all users that follow the viewer
     public function getFollowing(){
+        // get username
         $username = $this->getUsername();
 
         // select all followers of user's following

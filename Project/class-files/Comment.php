@@ -1,59 +1,71 @@
+<!-- Class file for comments -->
+<?php
+// includes 
+require "BtnVendor.php";
+require "CommentOptions.php";
 
-<?php 
-require_once "BtnVendor.php";
-require_once("CommentControls.php");
+// class
 class Comment {
 
-    private $sqlcon, $table_data, $logged_in_user, $contentId;
+    // private variables - db connection, data from db table, current user, media ID
+    private $sqlcon;
+    private $table_data;
+    private $logged_in_user;
+    private $mediaId;
 
-    public function __construct($sqlcon, $content, $logged_in_user, $contentId) {
-
-        if(!is_array($content)) {
-            $query = $sqlcon->prepare("SELECT * FROM comments where id=:id");
-            $query->bindParam(":id", $content);
-            $query->execute();
-
-            $content = $query->fetch_assoc();
-        }
-        
-        $this->table_data = $content;
+    // construct
+    public function __construct($sqlcon, $comment, $logged_in_user, $mediaId) {
+        // update private vars - get db connection, current user, and ID of media user is viewing
         $this->sqlcon = $sqlcon;
         $this->logged_in_user = $logged_in_user;
-        $this->contentId = $contentId;
+        $this->mediaId = $mediaId;
+
+        // store array of comments associated with the media in table_data
+        if(!is_array($comment)) {
+            $sql_statement = "SELECT * FROM comments where id=$comment";
+            $sql_qry = $this->sqlcon->query($sql_statement);
+            $this->table_data = $sql_qry->fetch_assoc();
+        }
     }
 
-    public function create() {
-        $id = $this->table_data["id"];
-        $contentId = $this->getVideoId();
-        $body = $this->table_data["body"];
-        $postedBy = $this->table_data["postedBy"];
-        $profileButton = ButtonProvider::createUserProfileButton($this->sqlcon, $postedBy);
-        $timespan = $this->time_elapsed_string($this->table_data["datePosted"]);
+    // function to create comment
+    public function addComment() {
+        // get comment information
+        $comment = $this->table_data["id"];// comment ID
+        $mediaId = $this->getMediaId();// media ID
+        $body = $this->table_data["body"];// comment text
+        $commentator = $this->table_data["postedBy"];// user who posted comment
+        $profileButton = BtnVendor::createProfileBtn($this->sqlcon, $commentator);// embedded button to poster's profile page
+        $time_elapsed = $this->comment_date($this->table_data["datePosted"]);
 
-        $commentControlsObj = new CommentControls($this->sqlcon, $this, $this->logged_in_user);
-        $commentControls = $commentControlsObj->create();
+        // generate comment controls: Reply, Like, Dislike
+        $controls_object = new CommentOptions($this->sqlcon, $this, $this->logged_in_user);
+        $controls = $controls_object->create();
 
-        $numResponses = $this->getNumberOfReplies();
+        // get responses to comment
+        $numResponses = $this->getNumResponses();// number of replies
         
+        // html for responses
         if($numResponses > 0) {
-            $viewRepliesText = "<span class='repliesSection viewReplies' onclick='getReplies($id, this, $contentId)'>
-                                    View all $numResponses replies</span>";
+            $viewResponses = "<span class='repliesSection viewReplies' onclick='getResponses($comment, this, $mediaId)'>
+                                    View $numResponses responses</span>";
         }
         else {
-            $viewRepliesText = "<div class='repliesSection'></div>";
+            $viewResponses = "<div class='repliesSection'></div>";
         }
 
-        return "<div class='itemContainer'>
+        // html for comment container
+        return "<div class='item_container'>
                     <div class='comment'>
                         $profileButton
 
-                        <div class='mainContainer'>
+                        <div class='main_container'>
 
-                            <div class='commentHeader'>
-                                <a href='profile.php?username=$postedBy'>
-                                    <span class='username'>$postedBy</span>
+                            <div class='comment_header'>
+                                <a href='profile.php?username=$commentator'>
+                                    <span class='username'>$commentator</span>
                                 </a>
-                                <span class='timestamp'>$timespan</span>
+                                <span class='timestamp'>$time_elapsed</span>
                             </div>
 
                             <div class='body'>
@@ -63,23 +75,26 @@ class Comment {
 
                     </div>
 
-                    $commentControls
-                    $viewRepliesText
+                    $controls
+                    $viewResponses
                 </div>";
-
-
     }
 
-    public function getNumberOfReplies() {
-        $query = $this->sqlcon->prepare("SELECT count(*) FROM comments WHERE responseTo=:responseTo");
-        $query->bindParam(":responseTo", $id);
-        $id = $this->table_data["id"];
-        $query->execute();
+    // get methods
 
-        return $query->fetchColumn();
+    // get number of replies to comment
+    public function getNumResponses() {
+        // use comment ID to get number of responses to comment
+        $comment = $this->table_data["id"];
+        $sql_statement = "SELECT count(*) FROM comments WHERE responseTo=$comment";
+        $sql_qry = $this->sqlcon->query($sql_statement);
+
+        // return number of responses
+        return $sql_qry->fetch_assoc();
     }
 
-    function time_elapsed_string($datetime, $full = false) {
+    // get date of comment
+    function comment_date($datetime, $full = false) {
         $now = new DateTime;
         $ago = new DateTime($datetime);
         $diff = $now->diff($ago);
@@ -108,134 +123,172 @@ class Comment {
         return $string ? implode(', ', $string) . ' ago' : 'just now';
     }
 
+    // comment ID
     public function getId() {
         return $this->table_data["id"];
     }
 
-    public function getVideoId() {
-        return $this->contentId;
+    // media ID
+    public function getMediaId() {
+        return $this->mediaId;
     }
 
-    public function wasLikedBy() {
-        $query = $this->sqlcon->prepare("SELECT * FROM likes WHERE username=:username AND commentId=:commentId");
-        $query->bindParam(":username", $username);
-        $query->bindParam(":commentId", $id);
-
-        $id = $this->getId();
-
+    // check if given user has liked comment
+    public function LikedByUser() {
+        // get comment ID and user who liked comment
+        $comment = $this->getId();
         $username = $this->logged_in_user->getUsername();
-        $query->execute();
 
-        return $query->rowCount() > 0;
+        // retrieve like if user liked comment
+        $sql_statement = "SELECT * FROM likes WHERE username=$username AND commentId=$comment";
+        $sql_qry = $this->sqlcon->query($sql_statement);
+
+        // return truth value on whether given user liked the comment
+        if ($sql_qry->num_rows > 0) {
+            return true;
+        }
+        else {
+            return false;
+        };
     }
 
-    public function wasDislikedBy() {
-        $query = $this->sqlcon->prepare("SELECT * FROM dislikes WHERE username=:username AND commentId=:commentId");
-        $query->bindParam(":username", $username);
-        $query->bindParam(":commentId", $id);
-
-        $id = $this->getId();
-
+    // check if given user has disliked comment
+    public function DislikedByUser() {
+        // get comment ID and user who disliked comment
+        $comment = $this->getId();
         $username = $this->logged_in_user->getUsername();
-        $query->execute();
 
-        return $query->rowCount() > 0;
+        // retrieve like if user disliked comment
+        $sql_statement = "SELECT * FROM dislikes WHERE username=$username AND commentId=$comment";
+        $sql_qry = $this->sqlcon->query($sql_statement);
+
+        // return truth value on whether given user disliked the comment
+        if ($sql_qry->num_rows > 0) {
+            return true;
+        }
+        else {
+            return false;
+        };
     }
 
-    public function getLikes() {
-        $query = $this->sqlcon->prepare("SELECT count(*) as 'count' FROM likes WHERE commentId=:commentId");
-        $query->bindParam(":commentId", $commentId);
-        $commentId = $this->getId();
-        $query->execute();
-
-        $data = $query->fetch_assoc();
-        $numLikes = $data["count"];
-
-        $query = $this->sqlcon->prepare("SELECT count(*) as 'count' FROM dislikes WHERE commentId=:commentId");
-        $query->bindParam(":commentId", $commentId);
-        $query->execute();
-
-        $data = $query->fetch_assoc();
-        $numDislikes = $data["count"];
+    // displays net count of likes/dislikes on comment
+    public function totalReaction() {
+        // get comment ID
+        $comment = $this->getId();
         
-        return $numLikes - $numDislikes;
+        // retrieve total number of likes and rtotal number of dislikes
+        $sql_statement = "SELECT (
+                            SELECT count(*)
+                            FROM likes
+                            WHERE commentId=$comment
+                            ) AS 'numLikes',
+                            (
+                            SELECT count(*)
+                            FROM dislikes
+                            WHERE commentId=$comment
+                            ) AS 'numDislikes'";
+        $sql_qry = $this->sqlcon->query($sql_statement);
+
+        // retrieve the info & store in vars
+        $data = $sql_qry->fetch_assoc();
+        $likes = $data["numLikes"];
+        $dislikes = $data["count"];
+        
+        // return the difference
+        return $likes - $dislikes;
     }
 
-    public function like() {
-        $id = $this->getId();
+    // method for comment 'Like' functionality
+    public function likeComment() {
+        // check if user has liked comment
+        $comment = $this->getId();
         $username = $this->logged_in_user->getUsername();
 
-        if($this->wasLikedBy()) {
-            // User has already liked
-            $query = $this->sqlcon->prepare("DELETE FROM likes WHERE username=:username AND commentId=:commentId");
-            $query->bindParam(":username", $username);
-            $query->bindParam(":commentId", $id);
-            $query->execute();
+        // if they have, delete the like from the database
+        if($this->LikedByUser()){
+            // delete like for this content
+            $sql_statement = "DELETE FROM likes WHERE username='$username' AND commentId='$comment'";
+            $this->sqlcon->query($sql_statement);
 
-            return -1;
+            // update likes & dislikes on page
+            $likes_change = -1;
+            $dislikes_change = 0; 
+            return $likes_change + $dislikes_change;
         }
+
+        // if they haven't, add new like & delete dislike if it exists
         else {
-            $query = $this->sqlcon->prepare("DELETE FROM dislikes WHERE username=:username AND commentId=:commentId");
-            $query->bindParam(":username", $username);
-            $query->bindParam(":commentId", $id);
-            $query->execute();
-            $count = $query->rowCount();
+            // add new like for this content
+            $sql_statement = "INSERT INTO likes (username, commentId) VALUES ('$username', '$comment')";
+            $this->sqlcon->query($sql_statement);
 
-            $query = $this->sqlcon->prepare("INSERT INTO likes(username, commentId) VALUES(:username, :commentId)");
-            $query->bindParam(":username", $username);
-            $query->bindParam(":commentId", $id);
-            $query->execute();
-
-            return 1 + $count;
+            // delete dislike for this content if it exists - cannot both like and dislike same content
+            $sql_statement = "DELETE FROM dislikes WHERE username='$username' AND commentId='$comment'";
+            $this->sqlcon->query($sql_statement);
+            $count = $this->sqlcon->affected_rows;// count = num of dislikes removed
+            
+            // return net number of likes on comment (num of likes - num of dislikes + count)
+            $likes_change = 1;
+            $dislikes_change = 0 - $count; 
+            return $likes_change + $dislikes_change;
         }
     }
 
-    public function dislike() {
-        $id = $this->getId();
+    // method for comment 'Dislike' functionality
+    public function dislikeComment() {
+        //check if user has disliked content already
+        $comment = $this->getId();
         $username = $this->logged_in_user->getUsername();
 
-        if($this->wasDislikedBy()) {
-            // User has already liked
-            $query = $this->sqlcon->prepare("DELETE FROM dislikes WHERE username=:username AND commentId=:commentId");
-            $query->bindParam(":username", $username);
-            $query->bindParam(":commentId", $id);
-            $query->execute();
+        // delete from database if exists
+        if($this->DislikedByUser()){
+            // delete dislike
+            $sql_statement = "DELETE FROM dislikes WHERE username='$username' AND commentId='$comment'";
+            $this->sqlcon->query($sql_statement);
 
-            return 1;
+            // return net number of likes on comment (num of likes - num of dislikes + count)
+            $likes_change = 0;
+            $dislikes_change = -1; 
+            return $likes_change + $dislikes_change;
         }
+
+        // add new dislike otherwise, remove like if there
         else {
-            $query = $this->sqlcon->prepare("DELETE FROM likes WHERE username=:username AND commentId=:commentId");
-            $query->bindParam(":username", $username);
-            $query->bindParam(":commentId", $id);
-            $query->execute();
-            $count = $query->rowCount();
+            // add new dislike
+            $sql_statement = "INSERT INTO dislikes (username, commentId) VALUES ('$username', '$comment')";
+            $this->sqlcon->query($sql_statement);
 
-            $query = $this->sqlcon->prepare("INSERT INTO dislikes(username, commentId) VALUES(:username, :commentId)");
-            $query->bindParam(":username", $username);
-            $query->bindParam(":commentId", $id);
-            $query->execute();
-
-            return -1 - $count;
+            // delete like if it exists
+            $sql_statement = "DELETE FROM likes WHERE username='$username' AND commentId='$comment'";
+            $this->sqlcon->query($sql_statement);
+            $count = $this->sqlcon->affected_rows;
+            
+            // return net number of likes on comment (num of likes - num of dislikes + count)
+            $likes_change = 0 - $count;
+            $dislikes_change = 1; 
+            return $likes_change + $dislikes_change;
         }
     }
 
-    public function getReplies() {
-        $query = $this->sqlcon->prepare("SELECT * FROM comments WHERE responseTo=:commentId ORDER BY datePosted ASC");
-        $query->bindParam(":commentId", $id);
+    // get array of all responses to comment
+    public function getResponses() {
+        // get comment ID
+        $comment = $this->getId();
 
-        $id = $this->getId();
+        // retrieve any responses to comment
+        $sql_statement = $this->sqlcon->prepare("SELECT * FROM comments WHERE responseTo=$comment ORDER BY datePosted ASC");
+        $sql_qry= $this->sqlcon->query($sql_statement);
 
-        $query->execute();
-
-        $comments = "";
-        $contentId = $this->getVideoId();
-        while($row = $query->fetch_assoc()) {
-            $comment = new Comment($this->sqlcon, $row, $this->logged_in_user, $contentId);
-            $comments .= $comment->create();
+        // store all responses into an array
+        $responses = "";
+        $mediaId = $this->getMediaId();
+        while($new_response = $sql_qry->fetch_assoc()) {
+            $response = new Comment($this->sqlcon, $new_response, $this->logged_in_user, $mediaId);
+            $responses .= $response->addComment();
         }
 
-        return $comments;
+        // return array
+        return $responses;
     }
-
 }
 ?>

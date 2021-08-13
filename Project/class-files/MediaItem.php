@@ -1,5 +1,6 @@
+<!-- -->
 <?php
-class VideoGridItem {
+class MediaItem {
 
     private $video, $largeMode;
 
@@ -9,6 +10,7 @@ class VideoGridItem {
     }
 
     public function create() {
+        // create thumbnail
         $thumbnail = $this->createThumbnail();
         $details = $this->createDetails();
         $url = "view.php?id=" . $this->video->getId();

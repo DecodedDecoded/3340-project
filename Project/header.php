@@ -5,19 +5,8 @@
     Edited by: Dariq Ahmed & Henry Pham
 -->
 
-<?php 
-    // PHP includes
-    require_once "db_creds.php"; // database connection credentials
-    require_once "class-files/Account.php"; // class for new user acct creation
-    require_once "loginCheck.php"; // check if user is logged in
-    require_once "class-files/BtnVendor.php";// provides methods & rendering for diff buttons
-    require_once "class-files/Media.php"; // class to hold media info
-    require_once "class-files/MediaGrid.php";// class for content grid
-    require_once "class-files/VideoGridItem.php";// class for individual item in content grid
-    require_once "class-files/NavMenuVendor.php";// provides methods for the navigation menu
-    require_once "class-files/FollowingVendor.php";// provides methods to get details of the user's followings
-    
-?>
+<!-- retrieve header includes -->
+<?php require_once "header_includes.php"; ?>
 
 <!DOCTYPE html>
 <html>
@@ -37,10 +26,10 @@
     </head>
 <body>
 
-    <!--Main page container -->
+    <!-- Main page container -->
     <div id="main_container">
 
-        <!--Div to handle everything in the header -->
+        <!-- Div to handle everything in the header -->
         <div id="header_container">
 
             <!-- container for left-side components -->
@@ -76,7 +65,7 @@
                     <img class="upload" src="imgs/upload.png" title="upload" alt="Upload">
                 </a>
 
-                <?php echo BtnVendor::createUserProfileNavigationButton($sqlcon, $logged_in_user->getUsername()); ?>
+                <?php echo BtnVendor::createProfileNavBtn($sqlcon, $logged_in_user->getUsername()); ?>
             </div>
         </div>
 

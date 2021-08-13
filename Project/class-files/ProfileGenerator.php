@@ -104,7 +104,7 @@ class ProfileGenerator {
             return "";
         }
         else {
-            return ButtonProvider::createSubscriberButton(
+            return BtnVendor::createSubscriberButton(
                         $this->con, 
                         $this->profileData->getProfileUserObj(),
                         $this->userLoggedInObj);

@@ -3,7 +3,7 @@
 class BtnVendor{
     // function to provide any button functionality
     // public static $loginFunction = "notSignedIn()";
-    public static function createAction($button_action) {
+    public static function addAction($button_action) {
         // return button action if user is logged in
         if(Account::isLoggedIn()) return $button_action;
 
@@ -11,15 +11,15 @@ class BtnVendor{
         else return BtnVendor::notSignedIn();
     }
 
-    // function to create any button
-    public static function createBtn($text, $img_src, $action, $class){
+    // function to add any button
+    public static function addBtn($text, $img_src, $action, $class){
         // save image source path
         if($img_src != null) $img = "<img src='$img_src'>";
         // if no image source, save empty string
         else $img = "";
        
         // return button functionality
-       $onclick = BtnVendor::createAction($action);
+       $onclick = BtnVendor::addAction($action);
 
        // return html element for button
         return "<button class='$class' onclick='$onclick'>
@@ -28,8 +28,8 @@ class BtnVendor{
                 </button>";
     }
 
-    // function to create any hyperlink
-    public static function createHrefBtn($text, $img_src, $href, $class){
+    // function to add any hyperlink
+    public static function addHrefBtn($text, $img_src, $href, $class){
         // save image source path
         if($img_src != null) $img = "<img src='$img_src'>";
         // if no image source, save empty string
@@ -44,8 +44,8 @@ class BtnVendor{
                 </a>";
     }
 
-    // create button to user profile
-    public static function createProfileBtn($sqlcon, $username) {
+    // add button to user profile
+    public static function addProfileBtn($sqlcon, $username) {
         $user_object = new Account($sqlcon, $username);
         $pfp = $user_object->getPfp();
         $link = "profile.php?username=$username";
@@ -56,13 +56,13 @@ class BtnVendor{
                 </a>";
     }
 
-    // create button for content creator to edit their own content
-    public static function createEditBtn($contentId) {
+    // add button for content creator to edit their own content
+    public static function addEditBtn($contentId) {
         // href link format
         $href = "edit.php?contentId=$contentId";
 
-        // create hyperlink button to edit page
-        $btn = BtnVendor::createHrefBtn("EDIT", null, $href, "edit_btn");
+        // add hyperlink button to edit page
+        $btn = BtnVendor::addHrefBtn("EDIT", null, $href, "edit_btn");
 
         // return html element for edit button
         return "<div class='editVideoButtonContainer'>
@@ -70,8 +70,8 @@ class BtnVendor{
                 </div>";
     }
 
-    // create button to follow user
-    public static function createFollowBtn($userTo_object, $logged_in_user) {
+    // add button to follow user
+    public static function addFollowBtn($userTo_object, $logged_in_user) {
         // check if logged in user is following the user that this button links to
         $userTo = $userTo_object->getUsername();
         $current_user = $logged_in_user->getUsername();
@@ -96,18 +96,18 @@ class BtnVendor{
             $button_class = "follow_btn";
         }
 
-        // create follow button
-        $btn = BtnVendor::createBtn($buttonText, null, "follow(\"$userTo\", \"$current_user\", this)", $button_class);
+        // add follow button
+        $btn = BtnVendor::addBtn($buttonText, null, "follow(\"$userTo\", \"$current_user\", this)", $button_class);
 
         // return html element for button
         return "<div class='followButtonContainer'>$btn</div>";
     }
 
-    // create element for profile button or sign in button in the nav bar
-    public static function createProfileNavBtn($sqlcon, $username) {
+    // add element for profile button or sign in button in the nav bar
+    public static function addProfileNavBtn($sqlcon, $username) {
         // return button to user's profile - this button is embedded in the user's profile pic
         if(Account::isLoggedIn()) {
-            return BtnVendor::createProfileBtn($sqlcon, $username);
+            return BtnVendor::addProfileBtn($sqlcon, $username);
         }
 
         // return hyperlink to login page

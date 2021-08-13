@@ -1,3 +1,4 @@
+<!-- Class for comments rendering -->
 <?php
 class CommentSection {
 
@@ -18,9 +19,9 @@ class CommentSection {
         $postedBy = $this->userLoggedInObj->getUsername();
         $videoId = $this->media->getId();
 
-        $profileButton = ButtonProvider::createUserProfileButton($this->sqlcon, $postedBy);
+        $profileButton = BtnVendor::createUserProfileButton($this->sqlcon, $postedBy);
         $commentAction = "postComment(this, \"$postedBy\", $videoId, null, \"comments\")";
-        $commentButton = ButtonProvider::createButton("COMMENT", null, $commentAction, "postComment");
+        $commentButton = BtnVendor::createButton("COMMENT", null, $commentAction, "postComment");
         
         $comments = $this->media->getComments();
         $commentItems = "";
