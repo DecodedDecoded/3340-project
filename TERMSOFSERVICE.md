@@ -10,13 +10,3 @@ Fair dealing is for everyone.  You probably make use of fair dealing every day w
 
 The Canadian Copyright Act allows the use of material from a copyright protected work (literature, musical scores, audiovisual works, etc.) without permission when certain conditions are met.
 People can use fair dealing for  research, private study, education, parody, satire, criticism, review, and news reporting. In order to ensure your copying is fair, you need to consider several factors such as the amount you are copying, whether you are distributing the copy to others, and whether your copying might have a detrimental effect on potential sales of the original work.
-
-What is the purpose of fair dealing?
-
-Fair dealing recognizes that certain uses of copyright protected works are beneficial for society. By placing limits on instances where copyright owners can require payment, fair dealing leads innovation, to the creation of new works and new scholarship. The Supreme Court of Canada increasingly refers to copyright as providing a balance between the rights of users and of copyright owners.
-
-Fair dealing has a large, positive impact, including for:
-
-- Educators and students at all levels,
-- Creative professionals (journalists, authors, filmmakers, musicians, etc.),
-- Individuals who want to use, copy or share portions of copyright protected works in their daily lives.
