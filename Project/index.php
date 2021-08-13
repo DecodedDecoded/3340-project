@@ -1,20 +1,29 @@
-<?php require_once("header.php"); ?>
+<!-- Header -->
+<?php require_once "header.php"; ?>
 
-<div class='videoSection'>
+<!-- section for main content of homepage: media, suggestions, etc. -->
+<div class='main_section'>
     <?php
     
-    $subscriptionsProvider = new SubscriptionsProvider($sqlcon, $userLoggedInObj);
-    $subscriptionVideos = $subscriptionsProvider->getVideos();
+    // object that provides methods to get content of creators that the user follows
+    $ffVendor = new FollowingVendor($sqlcon, $userLoggedInObj);
 
+    // method to get content
+    $followedMedia = $ffVendor->getVideos();
+
+    // object that contains html to display media items
     $videoGrid = new VideoGrid($sqlcon, $userLoggedInObj->getUsername());
 
-    if(Account::isLoggedIn() && sizeof($subscriptionVideos) > 0) {
-        echo $videoGrid->create($subscriptionVideos, "Subscriptions", false);
+    // grabs content of creators user follows as long as user is logged in
+    if(Account::isLoggedIn() && sizeof($followedMedia) > 0) {
+        echo $videoGrid->create($followedMedia, "Subscriptions", false);
     }
 
+    // grabs all content from media table
     echo $videoGrid->create(null, "Suggestions", false);
     ?>
 
 </div>
 
-<?php require_once("footer.php"); ?>
+<!-- Footer -->
+<?php require_once "footer.php"; ?>

@@ -1,11 +1,11 @@
 <?php
 class CommentSection {
 
-    private $con, $video, $userLoggedInObj;
+    private $sqlcon, $media, $userLoggedInObj;
 
-    public function __construct($con, $video, $userLoggedInObj) {
-        $this->con = $con;
-        $this->video = $video;
+    public function __construct($sqlcon, $media, $userLoggedInObj) {
+        $this->sqlcon = $sqlcon;
+        $this->media = $media;
         $this->userLoggedInObj = $userLoggedInObj;
     }
 
@@ -14,15 +14,15 @@ class CommentSection {
     }
 
     private function createCommentSection() {
-        $numComments = $this->video->getNumberOfComments();
+        $numComments = $this->media->getNumberOfComments();
         $postedBy = $this->userLoggedInObj->getUsername();
-        $videoId = $this->video->getId();
+        $videoId = $this->media->getId();
 
-        $profileButton = ButtonProvider::createUserProfileButton($this->con, $postedBy);
+        $profileButton = ButtonProvider::createUserProfileButton($this->sqlcon, $postedBy);
         $commentAction = "postComment(this, \"$postedBy\", $videoId, null, \"comments\")";
         $commentButton = ButtonProvider::createButton("COMMENT", null, $commentAction, "postComment");
         
-        $comments = $this->video->getComments();
+        $comments = $this->media->getComments();
         $commentItems = "";
         foreach($comments as $comment) {
             $commentItems .= $comment->create();

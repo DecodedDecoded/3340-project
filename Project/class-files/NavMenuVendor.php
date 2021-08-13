@@ -1,5 +1,5 @@
 <?php
-class NavigationMenuProvider {
+class NavMenuVendor {
     private $sqlcon, $userLoggedInObj;
 
     public function __construct($sqlcon, $userLoggedInObj) {

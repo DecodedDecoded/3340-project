@@ -1,10 +1,10 @@
 <?php
-class FollowingProvider {
+class FollowingVendor {
 
     private $sqlcon, $userLoggedInObj;
 
     public function __construct($sqlcon, $userLoggedInObj) {
-        $this->sqlcon = $con;
+        $this->sqlcon = $sqlcon;
         $this->userLoggedInObj = $userLoggedInObj;
     }
 

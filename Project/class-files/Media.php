@@ -1,60 +1,63 @@
+<!-- Class to carry Media Information -  -->
 <?php
 class Media {
 
-    private $sqlcon, $sqlData, $userLoggedInObj;
+    private $sqlcon, $table_data, $userLoggedInObj;
 
     public function __construct($sqlcon, $input, $userLoggedInObj) {
         $this->sqlcon = $sqlcon;
         $this->userLoggedInObj =  $userLoggedInObj;
 
-
+        // checks if media file is an array - for new file, upload it
         if(is_array($input)) {
-            $this->sqlData = $input;
+            $this->table_data = $input;
         }
 
+        // if not, file already exists - for existing file, retrieve it
         else {
             $SQL = "SELECT * from media WHERE id = '$input'";
             $query = $this->sqlcon->query($SQL);
     
-            $this->sqlData = $query->fetch_assoc();
+            $this->table_data = $query->fetch_assoc();
         }
     }
 
+    // get methods
     public function getId() {
-        return $this->sqlData["id"];
+        return $this->table_data["id"];
     }
 
     public function getUploadedBy() {
-        return $this->sqlData["uploadedBy"];
+        return $this->table_data["uploadedBy"];
     }
 
     public function getTitle() {
-        return $this->sqlData["title"];
+        return $this->table_data["title"];
     }
 
     public function getDescription() {
-        return $this->sqlData["description"];
+        return $this->table_data["description"];
     }
 
     public function getPrivacy() {
-        return $this->sqlData["privacy"];
+        return $this->table_data["privacy"];
     }
 
     public function getFilePath() {
-        return $this->sqlData["filePath"];
+        return $this->table_data["filePath"];
     }
 
     public function getCategory() {
-        return $this->sqlData["category"];
+        return $this->table_data["category"];
     }
 
     public function getUploadDate() {
-        $date = $this->sqlData["uploadDate"];
+        $date = $this->table_data["uploadDate"];
         return date("M j, Y", strtotime($date));
     }
 
     public function getViews() {
-        return $this->sqlData["views"];
+        return $this->table_data["views"];
     }
 
     public function incrementViews() {
@@ -62,7 +65,7 @@ class Media {
         $SQL = "UPDATE media SET views=views+1 WHERE id = '$videoId'";
         $query = $this->sqlcon->query($SQL);
         
-        $this->sqlData["views"] = $this->sqlData["views"] + 1;
+        $this->table_data["views"] = $this->table_data["views"] + 1;
     }
 
     public function getLikes() {

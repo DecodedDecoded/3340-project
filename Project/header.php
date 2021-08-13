@@ -1,34 +1,30 @@
+<!--
+    COMP-3340 Project, Team 1
+    Date: August 13, 2021
+    Written by: Donovan Longo & Abhilash Saksenaa
+    Edited by: Dariq Ahmed & Henry Pham
+-->
+
 <?php 
-// from Don
-require_once("db_creds.php"); // config.php
-require_once("Account.php"); // User.php
-require_once("Media.php");
-require_once("VideoGrid.php");
-require_once("ButtonProvider.php");
-require_once("VideoGridItem.php");
-require_once("NavigationMenuProvider.php");
-require_once("FollowingProvider.php");
-// from Abhilash 
-require_once("includes/classes/Video.php");
-require_once("includes/classes/SubscriptionsProvider.php"); 
-
-// If user is not logged in set it to null
-if(Account::isLoggedIn()) {
-    $usernameLoggedIn = $_SESSION["userLoggedIn"];
-}
-else {
-    $usernameLoggedIn = "";
-}
-// $usernameLoggedIn = User::isLoggedIn() ? $_SESSION["userLoggedIn"] : ""; // simplified - check how it looks in video
-
-$userLoggedInObj = new Account($sqlcon, $usernameLoggedIn);
-// $userLoggedInObj = new User($con, $usernameLoggedIn);
-
+    // PHP includes
+    require_once "db_creds.php"; // database connection credentials
+    require_once "class-files/Account.php"; // class for new user acct creation
+    require_once "class-files/Media.php"; // class to hold media info
+    require_once "class-files/VideoGrid.php";// class for content grid
+    require_once "class-files/BtnVendor.php";// provides methods & rendering for diff buttons
+    require_once "class-files/VideoGridItem.php";// class for individual item in content grid
+    require_once "class-files/NavMenuVendor.php";// provides methods for the navigation menu
+    require_once "class-files/FollowingVendor.php";// provides methods to get details of the user's followings
+    require_once "loginCheck.php"; // check if user is logged in
 ?>
+
 <!DOCTYPE html>
 <html>
     <head>
-        <title>HoardBoard.com - COMP-3340 Project Team 1</title>
+        <title>HoardBird - COMP-3340 Project Team 1</title>
+        <meta name="description" content="COMP-3340 Project, Team 1. A website where users can watch, upload, like and comment on content.">
+        <meta name="keywords" content="COMP-3340, UWindsor, CompSci, HTML, JS, CSS, Javascript, Bootstrap, jQuery, HoardBird">
+        <meta name="author" content="Team 1">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" href="stylesheet.css">
        
@@ -79,15 +75,15 @@ $userLoggedInObj = new Account($sqlcon, $usernameLoggedIn);
                     <img class="upload" src="imgs/upload.png" title="upload" alt="Upload">
                 </a>
 
-                <?php echo ButtonProvider::createUserProfileNavigationButton($sqlcon, $userLoggedInObj->getUsername()); ?>
+                <?php echo BtnVendor::createUserProfileNavigationButton($sqlcon, $logged_in_user->getUsername()); ?>
             </div>
         </div>
 
         <!--Div to handle everything in the side navigation bar -->
         <div id="sideNavContainer" style="display:none;">
             <?php
-            $navigationProvider = new NavigationMenuProvider($sqlcon, $userLoggedInObj);
-            echo $navigationProvider->create();
+            $navMVendor = new NavMenuVendor($sqlcon, $logged_in_user);
+            echo $navMVendor->create();
             ?>
         </div>
 

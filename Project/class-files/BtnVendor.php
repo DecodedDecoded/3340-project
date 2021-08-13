@@ -1,5 +1,5 @@
 <?php 
-class ButtonProvider{
+class BtnVendor{
 
     public static $signInFunction = "notSignedIn()";
     public static function createLink($link) {
@@ -8,7 +8,7 @@ class ButtonProvider{
             return $link;
         }
         else {
-            return ButtonProvider::$signInFunction;
+            return BtnVendor::$signInFunction;
         }
     }
 
@@ -21,7 +21,7 @@ class ButtonProvider{
             $image = "<img src='$imageSrc'>";
         }
        
-       $action = ButtonProvider::createLink($action);
+       $action = BtnVendor::createLink($action);
        
         return "<button class='$class' onclick='$action'>
                     $image  
@@ -81,7 +81,7 @@ class ButtonProvider{
 
         $action = "follow(\"$userTo\", \"$userLoggedIn\", this)";
 
-        $button = ButtonProvider::createButton($buttonText, null, $action, $buttonClass);
+        $button = BtnVendor::createButton($buttonText, null, $action, $buttonClass);
 
         return "<div class='followButtonContainer'>$button</div>";
 
@@ -89,7 +89,7 @@ class ButtonProvider{
 
     public static function createUserProfileNavigationButton($sqlcon, $username) {
         if(Account::isLoggedIn()) {
-            return ButtonProvider::createUserProfileButton($sqlcon, $username);
+            return BtnVendor::createUserProfileButton($sqlcon, $username);
         }
 
         else {
