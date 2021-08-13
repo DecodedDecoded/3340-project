@@ -2,14 +2,14 @@
 <?php
     // check if user is logged in, show if true
     if(Account::isLoggedIn()) {
-        $usernameLoggedIn = $_SESSION["userLoggedIn"];
+        $current_user = $_SESSION["userLoggedIn"];
     }
 
     // if not, show no user (set user to empty)
     else {
-        $usernameLoggedIn = "";
+        $current_user = "";
     }
 
-    // creates new user object
-    $logged_in_user = new Account($sqlcon, $usernameLoggedIn);
+    // creates object to carry user info
+    $logged_in_user = new Account($sqlcon, $current_user);
 ?>
