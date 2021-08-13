@@ -11,11 +11,11 @@ class Account {
         $this->sqlcon = $sqlcon;
 
         // sql query
-        $SQL = "SELECT * from users WHERE username = '$username'";
-        $sql_query = $this->sqlcon->query($SQL);
+        $sql_statement = "SELECT * from users WHERE username = '$username'";
+        $sql_qry = $this->sqlcon->query($sql_statement);
 
         // variable that holds function to retrieve result of sql query
-        $this->table_data = $sql_query->fetch_assoc();
+        $this->table_data = $sql_qry->fetch_assoc();
     }
 
     // check if user is logged in
@@ -69,11 +69,11 @@ class Account {
         $username = $this->getUsername();
 
         // retrieve creator from the followers database if they exist
-        $SQL = "SELECT * FROM followers WHERE userTo = '$userTo' AND userFrom='$username'";
-        $sql_query = $this->sqlcon->query($SQL);
+        $sql_statement = "SELECT * FROM followers WHERE userTo = '$userTo' AND userFrom='$username'";
+        $sql_qry = $this->sqlcon->query($sql_statement);
         
         // return truth value of whether user follows content creator or not
-        if($sql_query->num_rows > 0) {
+        if($sql_qry->num_rows > 0) {
             return true;
         }
         else {
@@ -87,11 +87,11 @@ class Account {
         $username = $this->getUsername();
 
         // retrieves any followers creator has
-        $SQL = "SELECT * FROM followers WHERE userTo = '$username'";
+        $sql_statement = "SELECT * FROM followers WHERE userTo = '$username'";
         
         // returns number of rows in retrieved table data
-        $sql_query = $this->sqlcon->query($SQL);
-        return $sql_query->num_rows;
+        $sql_qry = $this->sqlcon->query($sql_statement);
+        return $sql_qry->num_rows;
     }
 
     // gets array of all users that follow the viewer
@@ -99,15 +99,14 @@ class Account {
         $username = $this->getUsername();
 
         // select all followers of user's following
-        $SQL = "SELECT userTo FROM followers WHERE userFrom='$username'";
-
-        $query = $this->sqlcon->query($SQL);
+        $sql_statement = "SELECT userTo FROM followers WHERE userFrom='$username'";
+        $sql_qry = $this->sqlcon->query($sql_statement);
 
         // store them in an array
         $following = array();
-        while($row = $query->fetch_assoc()){
-            $user = new Account($this->sqlcon, $row["userTo"]);
-            array_push($following, $user);
+        while($new_row = $sql_qry->fetch_assoc()){
+            $next_follower = new Account($this->sqlcon, $new_row["userTo"]);
+            array_push($following, $next_follower);
         }
 
         // return the array

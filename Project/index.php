@@ -6,13 +6,13 @@
     <?php
     
     // object that provides methods to get content of creators that the user follows
-    $ffVendor = new FollowingVendor($sqlcon, $userLoggedInObj);
+    $ffVendor = new FollowingVendor($sqlcon, $logged_in_user);
 
     // method to get content
     $followedMedia = $ffVendor->getVideos();
 
     // object that contains html to display media items
-    $videoGrid = new VideoGrid($sqlcon, $userLoggedInObj->getUsername());
+    $videoGrid = new VideoGrid($sqlcon, $logged_in_user->getUsername());
 
     // grabs content of creators user follows as long as user is logged in
     if(Account::isLoggedIn() && sizeof($followedMedia) > 0) {

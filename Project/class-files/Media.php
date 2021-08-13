@@ -18,18 +18,33 @@ class Media {
 
         // if not, file already exists - for existing file, retrieve it
         else {
-            $SQL = "SELECT * from media WHERE id = '$content'";
-            $sql_query = $this->sqlcon->query($SQL);
-    
-            $this->table_data = $sql_query->fetch_assoc();
+            $sql_statement = "SELECT * from media WHERE id = '$content'";
+            $sql_qry = $this->sqlcon->query($sql_statement);
+            $this->table_data = $sql_qry->fetch_assoc();
         }
     }
 
     // get methods
 
-    // id
+    // content id
     public function getId() {
         return $this->table_data["id"];
+    }
+
+    // get content thumbnail
+    public function getThumbnail(){
+        // get content ID
+        $contentId = $this->getId();
+
+        // get file path of content's thumbnail image
+        $sql_statement = "SELECT filePath FROM thumbnails WHERE videoid='$contentId'";
+        $sql_qry = $this->sqlcon->query($sql_statement);
+
+        // object that contains fetched thumbnail
+        $thumbnail = $sql_qry->fetch_object();
+
+        // return thumbnail's file path
+        return $thumbnail->filePath;
     }
 
     // name (title) of content
@@ -38,7 +53,7 @@ class Media {
     }
 
     // content description
-    public function getDescription() {
+    public function getDescr() {
         return $this->table_data["description"];
     }
 
@@ -48,7 +63,7 @@ class Media {
     }
 
     // content file path
-    public function getFilePath() {
+    public function getFPath() {
         return $this->table_data["filePath"];
     }
 
@@ -58,7 +73,7 @@ class Media {
     }
 
     // name of user who uploaded content
-    public function getUploadedBy() {
+    public function getUserUploadedBy() {
         return $this->table_data["uploadedBy"];
     }
 
@@ -69,154 +84,189 @@ class Media {
     }
 
     // number of views content has
-    public function getViews() {
+    public function getNumViews() {
         return $this->table_data["views"];
     }
 
     // add new view to Views count of content being displayed
     public function newView() {
         // get content ID
-        $videoId = $this->getId();
+        $contentId = $this->getId();
 
-        // sql statement
-        $SQL = "UPDATE media SET views=views+1 WHERE id = '$videoId'";
-        $sql_query = $this->sqlcon->query($SQL);
+        // sql statement to update views count
+        $sql_statement = "UPDATE media SET views=views+1 WHERE id = '$contentId'";
         
+        // execute statement
+        $this->sqlcon->query($sql_statement);
+        
+        // update views count in field
         $this->table_data["views"] = $this->table_data["views"] + 1;
     }
 
     // retrieve number of likes piece of content has
-    public function getLikes() {
-        $videoId = $this->getId();
-        $SQL = "SELECT count(*) as 'count' FROM likes WHERE videoId='$videoId'";
-        $sql_query = $this->sqlcon->query($SQL);
+    public function getNumLikes() {
+        // get content ID & use to get number of likes on content
+        $contentId = $this->getId();
+        $sql_statement = "SELECT count(*) as 'count' FROM likes WHERE videoId='$contentId'";
+        $sql_qry = $this->sqlcon->query($sql_statement);
 
-        $data = $sql_query->fetch_assoc();
+        // retrieve resulting data
+        $sql_result = $sql_qry->fetch_assoc();
 
-        return $data["count"];
+        return $sql_result["count"];
     }
 
     // retrieve number of dislikes piece of content has
-    public function getDislikes() {
-        $videoId = $this->getId();
-        $SQL = "SELECT count(*) as 'count' FROM dislikes WHERE videoId='$videoId'";
-        $query = $this->sqlcon->query($SQL);
+    public function getNumDislikes() {
+        // get content ID & use to get number of dislikes on content
+        $contentId = $this->getId();
+        $sql_statement = "SELECT count(*) as 'count' FROM dislikes WHERE videoId='$contentId'";
+        $sql_qry = $this->sqlcon->query($sql_statement);
 
-        $data = $query->fetch_assoc();
+        // retrieve results
+        $sql_result = $sql_qry->fetch_assoc();
 
-        return $data["count"];
+        return $sql_result["count"];
+    }
+
+    // get number of comments on content
+    public function getNumComments() {
+        // get content ID & use to get number of comments
+        $contentId = $this->getId();
+        $sql_statement = "SELECT * FROM comments WHERE videoId=$contentId";
+        $sql_qry = $this->sqlcon->query($sql_statement);
+
+        // return number of comment records retrieved
+        return $sql_qry->num_rows;
+    }
+
+    // get array of all comments under content in comment section
+    public function getAllComments() {
+        // get content ID & use to get all comments under content
+        $contentId = $this->getId();
+        $sql_statement = "SELECT * FROM comments WHERE videoId=$contentId AND responseTo=0 ORDER BY datePosted DESC";
+        $sql_qry = $this->sqlcon->query($sql_statement);
+
+        // store them in an array
+        $comments = array();
+        while($new_row = $sql_qry->fetch_assoc()) {
+            $next_comment = new Comment($this->sqlcon, $new_row, $this->logged_in_user, $contentId);
+            array_push($comments, $next_comment);
+        }
+
+        // return the array of comments
+        return $comments;
     }
 
     // 'like' functionality
-    public function like(){
-        // check if user has liked the video already
-        $id = $this->getId();
+    
+    // check if user has liked this content
+    public function LikedByUser() {
+        // get content ID and viewer's username 
+        $contentId = $this->getId();
         $username = $this->logged_in_user->getUsername();
 
-        if($this->wasLikedBy()){
-            // User has already liked
-            $SQL = "DELETE FROM likes WHERE username='$username' AND videoId='$id'";
-            $sql_query = $this->sqlcon->query($SQL);
+        // retrieve user's like from database if it exists
+        $sql_statement = "SELECT * FROM likes WHERE username='$username' AND videoId='$contentId'";
+        $sql_qry = $this->sqlcon->query($sql_statement);
 
-            $result = array(
-                "likes" => -1,
-                "dislikes" => 0
-            );
-
-            return json_encode($result);
+        // return truth value of whether like exists or not
+        if($sql_qry->num_rows > 0) {
+            return true;
         }
         else {
-            //User has not liked yet
-            $SQL = "DELETE FROM dislikes WHERE username='$username' AND videoId='$id'";
-            $sql_query = $this->sqlcon->query($SQL);
-            $count = $this->sqlcon->affected_rows;
-
-
-            $SQL = "INSERT INTO likes (username, videoId) VALUES ('$username', '$id')";
-            $sql_query = $this->sqlcon->query($SQL);
-            
-            $result = array(
-                "likes" => 1,
-                "dislikes" => 0 - $count
-            );
-
-            return json_encode($result);
+            return false;
         }
     }
 
-    // 'dislikw' functionality
-    public function dislike(){
-        //check if user has liked the video already
-        $id = $this->getId();
+    // method for 'Like' button: adds or removes like from content
+    public function likeContent(){
+        // check if user has liked the content already
+        $contentId = $this->getId();
         $username = $this->logged_in_user->getUsername();
 
-        if($this->wasDislikedBy()){
-            //User has already disliked
-            $SQL = "DELETE FROM dislikes WHERE username='$username' AND videoId='$id'";
-            $query = $this->sqlcon->query($SQL);
+        // if they have, delete the like from the database
+        if($this->LikedByUser()){
+            // delete like for this content
+            $sql_statement = "DELETE FROM likes WHERE username='$username' AND videoId='$contentId'";
+            $this->sqlcon->query($sql_statement);
 
-            $result = array(
-                "likes" => 0,
-                "dislikes" => -1
-            );
+            // update likes & dislikes on page
+            $sql_result = array("likes" => -1, "dislikes" => 0);
+            return json_encode($sql_result);
+        }
 
-            return json_encode($result);
+        // if they haven't, add new like & delete dislike if it exists
+        else {
+            // add new like for this content
+            $sql_statement = "INSERT INTO likes (username, videoId) VALUES ('$username', '$contentId')";
+            $this->sqlcon->query($sql_statement);
+
+            // delete dislike for this content if it exists - cannot both like and dislike same content
+            $sql_statement = "DELETE FROM dislikes WHERE username='$username' AND videoId='$contentId'";
+            $this->sqlcon->query($sql_statement);
+            $count = $this->sqlcon->affected_rows;
+            
+            // update likes & dislikes on page
+            $sql_result = array("likes" => 1, "dislikes" => 0 - $count);
+            return json_encode($sql_result);
+        }
+    }
+
+    // 'dislike' functionality
+
+    // check if user has liked this content
+    public function DislikedByUser() {
+        // get content ID and viewer's username
+        $contentId = $this->getId();
+        $username = $this->logged_in_user->getUsername();
+
+        // retrieve dislike from database if it exists
+        $sql_statement = "SELECT * FROM dislikes WHERE username='$username' AND videoId='$contentId'";
+        $sql_qry = $this->sqlcon->query($sql_statement);
+
+        // return truth value of whether dislike exists or not
+        if($sql_qry->num_rows > 0) {
+            return true;
         }
         else {
-            //User has not disliked yet
-            $SQL = "DELETE FROM likes WHERE username='$username' AND videoId='$id'";
-            $query = $this->sqlcon->query($SQL);
-            $count = $this->sqlcon->affected_rows;
-
-
-            $SQL = "INSERT INTO dislikes (username, videoId) VALUES ('$username', '$id')";
-            $query = $this->sqlcon->query($SQL);
-            
-            $result = array(
-                "likes" => 0 - $count,
-                "dislikes" => 1
-            );
-
-            return json_encode($result);
+            return false;
         }
     }
 
-    public function wasLikedBy() {
-        $id = $this->getId();
+    // method for 'Dislike' button: adds or removes dislike from content
+    public function dislikeContent(){
+        //check if user has disliked content already
+        $contentId = $this->getId();
         $username = $this->logged_in_user->getUsername();
 
-        $SQL = "SELECT * FROM likes WHERE username='$username' AND videoId='$id'";
-        $query = $this->sqlcon->query($SQL);
+        // delete from database if exists
+        if($this->DislikedByUser()){
+            // delete dislike
+            $sql_statement = "DELETE FROM dislikes WHERE username='$username' AND videoId='$contentId'";
+            $this->sqlcon->query($sql_statement);
 
-        return mysqli_num_rows($query) > 0;
+            // update likes & dislikes on page
+            $sql_result = array("likes" => 0, "dislikes" => -1);
+            return json_encode($sql_result);
+        }
 
+        // add new dislike otherwise, remove like if there
+        else {
+            // add new dislike
+            $sql_statement = "INSERT INTO dislikes (username, videoId) VALUES ('$username', '$contentId')";
+            $this->sqlcon->query($sql_statement);
+
+            // delete like if it exists
+            $sql_statement = "DELETE FROM likes WHERE username='$username' AND videoId='$contentId'";
+            $this->sqlcon->query($sql_statement);
+            $count = $this->sqlcon->affected_rows;
+            
+            // update likes & dislikes on page
+            $sql_result = array("likes" => 0 - $count, "dislikes" => 1);
+            return json_encode($sql_result);
+        }
     }
-
-    public function wasDislikedBy() {
-        $id = $this->getId();
-        $username = $this->logged_in_user->getUsername();
-
-        $SQL = "SELECT * FROM dislikes WHERE username='$username' AND videoId='$id'";
-        $query = $this->sqlcon->query($SQL);
-
-        return mysqli_num_rows($query) > 0;
-
-    }
-
-    public function getThumbnail(){
-        $videoId = $this->getId();
-        $SQL = "SELECT filePath FROM thumbnails WHERE videoid='$videoId'";
-
-        $query = $this->sqlcon->query($SQL);
-        $obj = $query->fetch_object();
-        //echo $obj->filePath;
-
-        return $obj->filePath;
-    }
-
-
-
-   
 }
 
 ?>
