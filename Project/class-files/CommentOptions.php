@@ -80,7 +80,7 @@ class CommentOptions {
                 </div>";
     }
 
-    // 
+    // add 'Like' button for comment
     private function addLikeBtn() {
         $comment = $this->comment_object->getId();
         $mediaId = $this->comment_object->getMediaId();
@@ -96,7 +96,7 @@ class CommentOptions {
         return BtnVendor::addBtn("", $img_src, $action, $class);
     }
 
-    // 
+    // add 'Dislike' button for comment
     private function addDislikeBtn() {
         $commentId = $this->comment_object->getId();
         $videoId = $this->comment_object->getMediaId();
