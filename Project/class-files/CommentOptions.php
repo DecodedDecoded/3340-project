@@ -82,33 +82,33 @@ class CommentOptions {
 
     // add 'Like' button for comment
     private function addLikeBtn() {
+        // retrieve comment ID & media ID from comment object, store button img src field, function behavior & class
         $comment = $this->comment_object->getId();
         $mediaId = $this->comment_object->getMediaId();
+        $img_src = "imgs/like.png";
         $action = "likeComment($comment, this, $mediaId)";
-        $class = "likeBtn";
+        $class = "like_btn";
 
-        $img_src = "imgs/thumb-up.png";
+        // change button image if comment is liked by viewer
+        if($this->comment_object->likedByUser()) $img_src = "imgs/clicked_like.png";
 
-        if($this->comment_object->LikedByUser()) {
-            $img_src = "imgs/thumb-up-active.png";
-        }
-
+        // return created comment like button
         return BtnVendor::addBtn("", $img_src, $action, $class);
     }
 
     // add 'Dislike' button for comment
     private function addDislikeBtn() {
-        $commentId = $this->comment_object->getId();
-        $videoId = $this->comment_object->getMediaId();
-        $action = "dislikeComment($commentId, this, $videoId)";
-        $class = "dislikeBtn";
+        // retrieve comment ID & media ID from comment object, store button img src field, function behavior & class
+        $comment = $this->comment_object->getId();
+        $mediaId = $this->comment_object->getMediaId();
+        $img_src = "imgs/dislike.png";
+        $action = "dislikeComment($comment, this, $mediaId)";
+        $class = "dislike_btn";
 
-        $img_src = "imgs/thumb-down.png";
+        // change button image if comment is disliked by viewer
+        if($this->comment_object->dislikedByUser()) $img_src = "imgs/clicked_dislike.png";
 
-        if($this->comment_object->DislikedByUser()) {
-            $img_src = "imgs/thumb-down-active.png";
-        }
-
+        // return created comment ldisike button
         return BtnVendor::addBtn("", $img_src, $action, $class);
     }
 }
