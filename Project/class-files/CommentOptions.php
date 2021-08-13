@@ -6,14 +6,14 @@ require "BtnVendor.php";
 // class
 class CommentOptions {
 
-    // private variables - db connection, comment ID, current user
-    private $sql_con, $comment, $logged_in_user;
+    // private variables - db connection, comment object, current user
+    private $sql_con, $comment_object, $logged_in_user;
 
     // construct
-    public function __construct($sql_con, $comment, $logged_in_user) {
+    public function __construct($sql_con, $comment_object, $logged_in_user) {
         // store private vars
         $this->sql_con = $sql_con;
-        $this->comment = $comment;
+        $this->comment_object = $comment_object;
         $this->logged_in_user = $logged_in_user;
     }
 
@@ -36,73 +36,80 @@ class CommentOptions {
                 $respondSection";
     }
 
-    //
+    // add button to respond to comment
     private function addRespondBtn() {
+        // text & toggle for button
         $text = "RESPOND";
         $action = "toggleRespond(this)";
 
+        // add response button
         return BtnVendor::addBtn($text, null, $action, null);
     }
 
-    //
+    // add button to display net likes on comment
     private function addNetLikes() {
-        $text = $this->comment->getLikes();
+        $text = $this->comment_object->getLikes();
 
         return "<span class='likesCount'>$text</span>";
     }
 
-    //
+    // add section for responses to comment
     private function addRespondSection() {
-        $postedBy = $this->logged_in_user->getUsername();
-        $videoId = $this->comment->getVideoId();
-        $commentId = $this->comment->getId();
+        // get username of current user, IDs of media & comment under media
+        $commentator = $this->logged_in_user->getUsername();
+        $mediaId = $this->comment_object->getMediaId();
+        $comment = $this->comment_object->getId();
 
-        $profileBtn = BtnVendor::addProfileBtn($this->sql_con, $postedBy);
+        // add button to profile embedded in username
+        $profileBtn = BtnVendor::addProfileBtn($this->sql_con, $commentator);
         
-        $cancelBtnAction = "toggleRespond(this)";
-        $cancelBtn = BtnVendor::addBtn("Cancel", null, $cancelBtnAction, "cancelComment");
+        // add cancel button for comment
+        $cancelBtn_action = "toggleRespond(this)";
+        $cancelBtn = BtnVendor::addBtn("CANCEL", null, $cancelBtn_action, "cancel_comment");
 
-        $postBtnAction = "postComment(this, \"$postedBy\", $videoId, $commentId, \"repliesSection\")";
-        $postBtn = BtnVendor::addBtn("Respond", null, $postBtnAction, "postComment");
+        // add submit button for comment
+        $submitBtn_action = "postComment(this, \"$commentator\", $mediaId, $comment, \"repliesSection\")";
+        $submitBtn = BtnVendor::addBtn("RESPOND", null, $submitBtn_action, "submit_omment");
 
+        // return html for response section
         return "<div class='commentForm hidden'>
                     $profileBtn
                     <textarea class='commentBodyClass' placeholder='Add a public comment'></textarea>
                     $cancelBtn
-                    $postBtn
+                    $submitBtn
                 </div>";
     }
 
-    //
+    // 
     private function addLikeBtn() {
-        $commentId = $this->comment->getId();
-        $videoId = $this->comment->getVideoId();
-        $action = "likeComment($commentId, this, $videoId)";
+        $comment = $this->comment_object->getId();
+        $mediaId = $this->comment_object->getMediaId();
+        $action = "likeComment($comment, this, $mediaId)";
         $class = "likeBtn";
 
-        $imageSrc = "assets/images/icons/thumb-up.png";
+        $img_src = "imgs/thumb-up.png";
 
-        if($this->comment->wasLikedBy()) {
-            $imageSrc = "assets/images/icons/thumb-up-active.png";
+        if($this->comment_object->LikedByUser()) {
+            $img_src = "imgs/thumb-up-active.png";
         }
 
-        return BtnVendor::addBtn("", $imageSrc, $action, $class);
+        return BtnVendor::addBtn("", $img_src, $action, $class);
     }
 
-    //
+    // 
     private function addDislikeBtn() {
-        $commentId = $this->comment->getId();
-        $videoId = $this->comment->getVideoId();
+        $commentId = $this->comment_object->getId();
+        $videoId = $this->comment_object->getMediaId();
         $action = "dislikeComment($commentId, this, $videoId)";
         $class = "dislikeBtn";
 
-        $imageSrc = "assets/images/icons/thumb-down.png";
+        $img_src = "imgs/thumb-down.png";
 
-        if($this->comment->wasDislikedBy()) {
-            $imageSrc = "assets/images/icons/thumb-down-active.png";
+        if($this->comment_object->DislikedByUser()) {
+            $img_src = "imgs/thumb-down-active.png";
         }
 
-        return BtnVendor::addBtn("", $imageSrc, $action, $class);
+        return BtnVendor::addBtn("", $img_src, $action, $class);
     }
 }
 ?>

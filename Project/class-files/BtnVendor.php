@@ -2,13 +2,13 @@
 <?php 
 class BtnVendor{
     // function to provide any button functionality
-    // public static $loginFunction = "notSignedIn()";
+    public static $loginFunction = "notSignedIn()";// to be used later on; function in commonActions.js
     public static function addAction($button_action) {
         // return button action if user is logged in
         if(Account::isLoggedIn()) return $button_action;
 
-        // if not logged in, return
-        else return BtnVendor::notSignedIn();
+        // if not logged in, return 'not signed in'
+        else return BtnVendor::$loginFunction;
     }
 
     // function to add any button

@@ -35,12 +35,12 @@ class Comment {
         $mediaId = $this->getMediaId();// media ID
         $body = $this->table_data["body"];// comment text
         $commentator = $this->table_data["postedBy"];// user who posted comment
-        $profileButton = BtnVendor::createProfileBtn($this->sqlcon, $commentator);// embedded button to poster's profile page
+        $profileButton = BtnVendor::addProfileBtn($this->sqlcon, $commentator);// embedded button to poster's profile page
         $time_elapsed = $this->comment_date($this->table_data["datePosted"]);
 
         // generate comment controls: Reply, Like, Dislike
         $controls_object = new CommentOptions($this->sqlcon, $this, $this->logged_in_user);
-        $controls = $controls_object->create();
+        $controls = $controls_object->addOptionBtns();
 
         // get responses to comment
         $numResponses = $this->getNumResponses();// number of replies
@@ -134,7 +134,7 @@ class Comment {
     }
 
     // check if given user has liked comment
-    public function LikedByUser() {
+    public function likedByUser() {
         // get comment ID and user who liked comment
         $comment = $this->getId();
         $username = $this->logged_in_user->getUsername();
@@ -153,7 +153,7 @@ class Comment {
     }
 
     // check if given user has disliked comment
-    public function DislikedByUser() {
+    public function dislikedByUser() {
         // get comment ID and user who disliked comment
         $comment = $this->getId();
         $username = $this->logged_in_user->getUsername();
@@ -205,7 +205,7 @@ class Comment {
         $username = $this->logged_in_user->getUsername();
 
         // if they have, delete the like from the database
-        if($this->LikedByUser()){
+        if($this->likedByUser()){
             // delete like for this content
             $sql_statement = "DELETE FROM likes WHERE username='$username' AND commentId='$comment'";
             $this->sqlcon->query($sql_statement);
@@ -241,7 +241,7 @@ class Comment {
         $username = $this->logged_in_user->getUsername();
 
         // delete from database if exists
-        if($this->DislikedByUser()){
+        if($this->dislikedByUser()){
             // delete dislike
             $sql_statement = "DELETE FROM dislikes WHERE username='$username' AND commentId='$comment'";
             $this->sqlcon->query($sql_statement);

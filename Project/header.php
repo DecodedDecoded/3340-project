@@ -65,7 +65,7 @@
                     <img class="upload" src="imgs/upload.png" title="upload" alt="Upload">
                 </a>
 
-                <?php echo BtnVendor::createProfileNavBtn($sqlcon, $logged_in_user->getUsername()); ?>
+                <?php echo BtnVendor::addProfileNavBtn($sqlcon, $logged_in_user->getUsername()); ?>
             </div>
         </div>
 
