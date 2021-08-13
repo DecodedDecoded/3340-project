@@ -4,39 +4,39 @@ require_once "BtnVendor.php";
 require_once("CommentControls.php");
 class Comment {
 
-    private $sqlcon, $sqlData, $userLoggedInObj, $videoId;
+    private $sqlcon, $table_data, $logged_in_user, $contentId;
 
-    public function __construct($sqlcon, $input, $userLoggedInObj, $videoId) {
+    public function __construct($sqlcon, $content, $logged_in_user, $contentId) {
 
-        if(!is_array($input)) {
+        if(!is_array($content)) {
             $query = $sqlcon->prepare("SELECT * FROM comments where id=:id");
-            $query->bindParam(":id", $input);
+            $query->bindParam(":id", $content);
             $query->execute();
 
-            $input = $query->fetch_assoc();
+            $content = $query->fetch_assoc();
         }
         
-        $this->sqlData = $input;
+        $this->table_data = $content;
         $this->sqlcon = $sqlcon;
-        $this->userLoggedInObj = $userLoggedInObj;
-        $this->videoId = $videoId;
+        $this->logged_in_user = $logged_in_user;
+        $this->contentId = $contentId;
     }
 
     public function create() {
-        $id = $this->sqlData["id"];
-        $videoId = $this->getVideoId();
-        $body = $this->sqlData["body"];
-        $postedBy = $this->sqlData["postedBy"];
+        $id = $this->table_data["id"];
+        $contentId = $this->getVideoId();
+        $body = $this->table_data["body"];
+        $postedBy = $this->table_data["postedBy"];
         $profileButton = ButtonProvider::createUserProfileButton($this->sqlcon, $postedBy);
-        $timespan = $this->time_elapsed_string($this->sqlData["datePosted"]);
+        $timespan = $this->time_elapsed_string($this->table_data["datePosted"]);
 
-        $commentControlsObj = new CommentControls($this->sqlcon, $this, $this->userLoggedInObj);
+        $commentControlsObj = new CommentControls($this->sqlcon, $this, $this->logged_in_user);
         $commentControls = $commentControlsObj->create();
 
         $numResponses = $this->getNumberOfReplies();
         
         if($numResponses > 0) {
-            $viewRepliesText = "<span class='repliesSection viewReplies' onclick='getReplies($id, this, $videoId)'>
+            $viewRepliesText = "<span class='repliesSection viewReplies' onclick='getReplies($id, this, $contentId)'>
                                     View all $numResponses replies</span>";
         }
         else {
@@ -73,7 +73,7 @@ class Comment {
     public function getNumberOfReplies() {
         $query = $this->sqlcon->prepare("SELECT count(*) FROM comments WHERE responseTo=:responseTo");
         $query->bindParam(":responseTo", $id);
-        $id = $this->sqlData["id"];
+        $id = $this->table_data["id"];
         $query->execute();
 
         return $query->fetchColumn();
@@ -109,11 +109,11 @@ class Comment {
     }
 
     public function getId() {
-        return $this->sqlData["id"];
+        return $this->table_data["id"];
     }
 
     public function getVideoId() {
-        return $this->videoId;
+        return $this->contentId;
     }
 
     public function wasLikedBy() {
@@ -123,7 +123,7 @@ class Comment {
 
         $id = $this->getId();
 
-        $username = $this->userLoggedInObj->getUsername();
+        $username = $this->logged_in_user->getUsername();
         $query->execute();
 
         return $query->rowCount() > 0;
@@ -136,7 +136,7 @@ class Comment {
 
         $id = $this->getId();
 
-        $username = $this->userLoggedInObj->getUsername();
+        $username = $this->logged_in_user->getUsername();
         $query->execute();
 
         return $query->rowCount() > 0;
@@ -163,7 +163,7 @@ class Comment {
 
     public function like() {
         $id = $this->getId();
-        $username = $this->userLoggedInObj->getUsername();
+        $username = $this->logged_in_user->getUsername();
 
         if($this->wasLikedBy()) {
             // User has already liked
@@ -192,7 +192,7 @@ class Comment {
 
     public function dislike() {
         $id = $this->getId();
-        $username = $this->userLoggedInObj->getUsername();
+        $username = $this->logged_in_user->getUsername();
 
         if($this->wasDislikedBy()) {
             // User has already liked
@@ -228,9 +228,9 @@ class Comment {
         $query->execute();
 
         $comments = "";
-        $videoId = $this->getVideoId();
+        $contentId = $this->getVideoId();
         while($row = $query->fetch_assoc()) {
-            $comment = new Comment($this->sqlcon, $row, $this->userLoggedInObj, $videoId);
+            $comment = new Comment($this->sqlcon, $row, $this->logged_in_user, $contentId);
             $comments .= $comment->create();
         }
 

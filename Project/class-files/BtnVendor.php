@@ -12,7 +12,7 @@ class BtnVendor{
     }
 
     // function to create any button
-    public static function createButton($text, $img_src, $action, $class){
+    public static function createBtn($text, $img_src, $action, $class){
         // save image source path
         if($img_src != null) $img = "<img src='$img_src'>";
         // if no image source, save empty string
@@ -56,8 +56,22 @@ class BtnVendor{
                 </a>";
     }
 
+    // create button for content creator to edit their own content
+    public static function createEditBtn($contentId) {
+        // href link format
+        $href = "edit.php?contentId=$contentId";
+
+        // create hyperlink button to edit page
+        $btn = BtnVendor::createHrefBtn("EDIT", null, $href, "edit_btn");
+
+        // return html element for edit button
+        return "<div class='editVideoButtonContainer'>
+                    $btn
+                </div>";
+    }
+
     // create button to follow user
-    public static function createFollowButton($userTo_object, $logged_in_user) {
+    public static function createFollowBtn($userTo_object, $logged_in_user) {
         // check if logged in user is following the user that this button links to
         $userTo = $userTo_object->getUsername();
         $current_user = $logged_in_user->getUsername();
@@ -76,19 +90,20 @@ class BtnVendor{
 
         // set button's class based on whether user follows creator
         if($isFollowing){
-            $button_class = "unfollow_button";
+            $button_class = "unfollow_btn";
         }
         else {
-            $button_class = "follow_button";
+            $button_class = "follow_btn";
         }
 
         // create follow button
-        $button = BtnVendor::createButton($buttonText, null, "follow(\"$userTo\", \"$current_user\", this)", $button_class);
+        $btn = BtnVendor::createBtn($buttonText, null, "follow(\"$userTo\", \"$current_user\", this)", $button_class);
 
         // return html element for button
-        return "<div class='followButtonContainer'>$button</div>";
+        return "<div class='followButtonContainer'>$btn</div>";
     }
 
+    // create element for profile button or sign in button in the nav bar
     public static function createProfileNavBtn($sqlcon, $username) {
         // return button to user's profile - this button is embedded in the user's profile pic
         if(Account::isLoggedIn()) {
@@ -102,6 +117,5 @@ class BtnVendor{
                     </a>";
         }
     }
-
 }
 ?>
